@@ -83,16 +83,6 @@ namespace AddressBook.Controllers
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = contactsInfo.ID }, contactsInfo);
-
-            
-            _context.Messages.Add(message);
-            await _context.SaveChangesAsync();
-
-            var message = await _context.Messages
-                            .Include(i => i.MessageBoard)
-                            .FirstOrDefaultAsync(i => i.Id == message.Id);
-
-            return Json(message);
         }
 
         // DELETE: api/Contacts/5
