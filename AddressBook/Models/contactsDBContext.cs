@@ -10,6 +10,11 @@ namespace AddressBook.Models
 {
     public class contactsDBContext : DbContext
     {
+        public contactsDBContext()
+            : base("SQLConnection")
+        { 
+        }
+        
         public DbSet<ContactsInfo> ContactsInfos { get; set; }
         public DbSet<PhoneNumbers> numbers { get; set; }
 

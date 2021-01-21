@@ -1,24 +1,83 @@
-﻿<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+﻿<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<h4> Registration Form</h4>
+<div id="loginDiv" style="width:50%">
+    <div style="width:50%">
+        <div class="form-group">
+            <label for="txtEmail">First Name </label>
+            <input type='email' name="email" id="txtEmail" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="textPwd" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Confrim Password</label>
+            <input type="password" id="txtConfirmPwd" class="form-control">
+        </div>
+    </div>
+    <button id="register" class="btn btn-default">Submit</button>
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-        a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-        is an ideal platform for building RESTful applications on the .NET Framework.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
+<h4>Login </h4>
+
+<div id="loginDiv" style="width:50%">
+    <div class="form-group">
+        <label for="txtEmail">First Name </label>
+        <input type='email' name="email" id="loginEmail" class="form-control">
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPwd" class="form-control">
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
-    </div>
+    <button id="btnLogin" class="btn btn-default">Submit</button>
 </div>
+<div>
+    <label id="msg"></label>
+</div>
+<script>
+ $(document).ready(function () {
+ $("#register").on('click', function () {
+ var data = { Email: $("#txtEmail").val().trim(), Password: $("#textPwd").val().trim(), ConfirmPassword: $("#txtConfirmPwd").val().trim() };
+ $.ajax({
+     url: "https://localhost:44336/api/Account/Register",
+ type: 'POST',
+ data: data,
+ success: function (resp) {
+ window.location.href = '/Home/Index';
+ }
+ })
+ });
+
+ $("#btnLogin").on('click', function () {
+ //var data = { Email: $("#loginEmail").val().trim(), Password: $("#textPwd").val().trim(), ConfirmPassword: $("#loginPwd").val().trim() };
+ $.ajax(
+ {
+ url: "/TOKEN",
+ type: "POST",
+ data: $.param({ grant_type: 'password', username: $("#loginEmail").val(), password: $("#loginPwd").val() }),
+ headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+ success: function (resp) {
+ sessionStorage.setItem('userName', resp.userName);
+ sessionStorage.setItem('accessToken', resp.access_token);
+ var authHeaders = {};
+ authHeaders.Authorization = 'Bearer ' + resp.access_token;
+ $.ajax({
+     url: "https://localhost:44336/api/values",
+ type: "GET",
+ headers: authHeaders,
+ success: function (response) {
+ $("#loginEmail").val("");
+ $("#loginPwd").val("");
+ $("#msg").text(response);
+ }
+ });
+
+ },
+ error: function () {
+ $("#msg").text("Authentication failed");
+ }
+ })
+ });
+
+
+ })
+</script>
