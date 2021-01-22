@@ -52,5 +52,43 @@ namespace AddressBook.Controllers
         {
             return View();
         }
+
+        [ChildActionOnly]
+        public ActionResult RenderMenu(int id)
+        {
+            var employee = db.numbers.Where(m => m.contactId == id);
+            return PartialView("_PhoneNumberRender",employee);
+        }
+
+        //[HttpPost]
+        //public void Delete(int id, FormCollection collection)
+        //{
+        //    try
+        //    {
+        //        var term = db.numbers.Where(x => x.ID == id).First();
+        //        db.numbers.Remove(term);
+        //        db.SaveChanges();
+        //        //return View();
+        //        //return RedirectToAction("Index");
+        //    }
+        //    catch
+        //    {
+        //        //return View();
+        //    }
+        //}
+
+        [HttpDelete]
+        public JsonResult Delete(int id)
+        {
+            //var term = db.numbers.Where(x => x.ID == id).First();
+            //db.numbers.Remove(term);
+            //db.SaveChanges();
+            return Json("Response from Delete");
+        }
+
+        public ActionResult LoginRegister()
+        {
+            return View();
+        }
     }
 }

@@ -101,6 +101,20 @@ namespace AddressBook.Controllers
             return Ok(contactsInfo);
         }
 
+        [ResponseType(typeof(ContactsInfo))]
+        public IHttpActionResult DeletePhoneNumber(int id,int pid)
+        {
+            PhoneNumbers contactsInfo = db.numbers.Find(pid);
+            if (contactsInfo == null)
+            {
+                return NotFound();
+            }
+
+            db.numbers.Remove(contactsInfo);
+            db.SaveChanges();
+
+            return Ok(contactsInfo);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

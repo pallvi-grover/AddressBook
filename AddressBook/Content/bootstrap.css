@@ -4924,21 +4924,23 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   background-color: #fff;
 }
 .label {
-  display: inline;
-  padding: 0.2em 0.6em 0.3em;
-  font-size: 75%;
-  font-weight: 700;
-  line-height: 1;
-  color: #fff;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  border-radius: 0.25em;
+    display: inline;
+    padding: 0.2em 0.6em 0.3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    /*color: #fff;*/
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25em;
+    border: 1px solid transparent;
+    text-shadow: 2px;
 }
 a.label:hover,
 a.label:focus {
-  color: #fff;
-  text-decoration: none;
+  /*color: #fff;*/
+  text-decoration:wavy;
   cursor: pointer;
 }
 .label:empty {
