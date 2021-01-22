@@ -12,14 +12,14 @@ namespace AddressBook.Controllers
         private contactsDBContext db = new contactsDBContext();
         public ActionResult Index()
         {
-            //var employees = from e in db.ContactsInfos
-            //                orderby e.ID
-            //                select e;
-            
+            var employees = from e in db.ContactsInfos
+                            orderby e.ID
+                            select e;
+
             ViewBag.Title = "Home Page";
 
-            // return View(employees);
-            return View();
+             return View(employees);
+            //return View();
         }
     }
 }
