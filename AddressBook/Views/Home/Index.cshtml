@@ -20,7 +20,8 @@
     }
 </style>
 <h2 class="page-name">Contacts List</h2>
-
+@Html.ActionLink("Create New Contact", "Create", null, new { @class = "label" })
+@Html.ActionLink("Delete", "Delete", null, new { @class = "label" })
 <div class="lead">
     <hr />
     <table class="table table-bordered .table-hover .table-responsive">
@@ -41,3 +42,18 @@
 
     </table>
 </div>
+<script type="text/javascript">
+    $.ajax({
+        type: "GET",
+        url: '/TestController/DeleteTest?id=10',
+        contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+            if (data) {
+                // Works
+            }
+        },
+        error: function (erro) {
+            console.debug(erro);
+        }
+    });
+</script>
