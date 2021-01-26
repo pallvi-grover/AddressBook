@@ -2,122 +2,114 @@
 
 @{
     ViewBag.Title = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<style>
+    #someText {
+        border: 5px solid black;
+    }
+</style>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>Edit the Contacts Information</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.ID)
+    <div class="form-horizontal">
+        <h2 class="page-name">Edit the Contacts Information</h2>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
 
-    <div class="form-group">
-        @Html.Label("Name", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Nick Name", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Email ID", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Date of Birth", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.dob, "{0:yyyy-MM-dd}", new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Address ", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Phone Number Details:", new { @class = "control-label col-md-2" })
-    </div>
-    @foreach (var item in Model.phoneNumbers)
-    {
         <div class="form-group">
-            @Html.Label("Type", new { @class = "control-label col-md-2" })
+            @Html.Label("Name", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBox(item.type, item.type, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.phoneNumbers, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div>@Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + ")" })</div>
-        @*<input type="hidden" id="hiddenCommentID" value="@item.ID" />*@
+
         <div class="form-group">
-            @Html.Label("Number", new { @class = "control-label col-md-2" })
+            @Html.Label("Nick Name", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBox(item.Number, item.Number, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.phoneNumbers, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
             </div>
         </div>
-    }
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
-            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+        <div class="form-group">
+            @Html.Label("Email ID", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Date of Birth", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.dob, "{0:yyyy-MM-dd}", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Address ", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Phone Number Details:", new { @class = "control-label col-md-2" })
+        </div>
+        @foreach (var item in Model.phoneNumbers)
+        {
+            <div class="form-group">
+                @Html.Label("Type", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBox(item.type, item.type, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.phoneNumbers, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div>@Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + "," + Model.ID + ")" })</div>
+            @*<input type="hidden" id="hiddenCommentID" value="@item.ID" />*@
+            <div class="form-group">
+                @Html.Label("Number", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBox(item.Number, item.Number, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.phoneNumbers, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        @Html.Label("text", new { @class = "control-label col-md-2", @id = "someText" })
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+            </div>
         </div>
     </div>
-</div>
 }
 <script>
-    //$("#myLink").click(function (e) {
-    //    e.preventDefault();
-    //    $.ajax({
-    //        url: $(this).attr("href"), // comma here instead of semicolon
-    //        success: function () {
-    //            alert("Number deleted");  // or any other indication if you want to show
-    //        }
-    //    });
-    //});
- //   $(document).ready(function () {
-        // function numberDelete(id) {
-        $("#myLink").click(function () {
-            alert("Entered the API request function");
-            $.ajax({
-                url: 'https://localhost:44336/api/Contacts/1',
-                //dataType: "json",
-                type: "DELETE",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                //data: JSON.stringify({ id: id }),
-                //async: true,
-                //processData: false,
-                //cache: false,
-                success: function (data) {
-                    alert("Number Deleted");
-                    alert(data);
-                },
-                error: function (xhr) {
-                    alert(xhr.responseText);
+    function numberDelete(id, contactId) {
+        alert("Hi");
+        alert("please");
+        alert("Entered the API delete request function");
+        $.ajax({
+            url: "/api/Contacts/" + contactId + "?pid=" + id,
+            method: "DELETE",
+            async: false,
+            success: function (data) {
+                alert("Number Deleted");
+                alert(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                if (xhr.status == 404) {
+                    alert(thrownError);
+                    alert("Error occured");
+                    $('#someText').text('Cannot find this record');
                 }
-            });
-            //})
-        })
-//    })
+            }
+        });
+    }
 </script>

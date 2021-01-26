@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Contacts List";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <style>
@@ -21,7 +20,8 @@
 </style>
 <h2 class="page-name">Contacts List</h2>
 @Html.ActionLink("Create New Contact", "Create", null, new { @class = "label" })
-@Html.ActionLink("Delete", "Delete", null, new { @class = "label" })
+@*@Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + ")" })*@
+@*@Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + "," + Model.ID + ")" })*@
 <div class="lead">
     <hr />
     <table class="table table-bordered .table-hover .table-responsive">
@@ -29,7 +29,7 @@
             <th>
                 Names:
             </th>
-            <th></th>
+            @*<th></th>*@
         </tr>
         @foreach (var item in Model)
         {
@@ -37,23 +37,34 @@
                 <td>
                     @Html.ActionLink(item.fullName, "Edit", new { id = item.ID })
                 </td>
+                <td>
+                    @Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + ")" })
+                </td>
             </tr>
         }
 
     </table>
 </div>
-<script type="text/javascript">
-    $.ajax({
-        type: "GET",
-        url: '/TestController/DeleteTest?id=10',
-        contentType: 'application/json; charset=utf-8',
-        success: function (data) {
-            if (data) {
-                // Works
+<script>
+    function numberDelete(contactId) {
+        alert("Hi");
+        alert("please");
+        alert("Entered the API delete request function");
+        $.ajax({
+            url: "/api/Contacts/" + contactId,
+            method: "DELETE",
+            async: false,
+            success: function (data) {
+                alert("Number Deleted");
+                alert(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                if (xhr.status == 404) {
+                    alert(thrownError);
+                    alert("Error occured");
+                    $('#someText').text('Cannot find this record');
+                }
             }
-        },
-        error: function (erro) {
-            console.debug(erro);
-        }
-    });
+        });
+    }
 </script>
