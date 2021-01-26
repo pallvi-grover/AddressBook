@@ -5,9 +5,13 @@
 }
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <style>
-    #someText {
-        border: 5px solid black;
+    #PhoneNumberDetails, #EditPhoneNumberDetails, #HideButton {
+        display: none;
     }
+
+    /* #HideButton {
+        display: none;
+    }*/
 </style>
 @using (Html.BeginForm())
 {
@@ -58,58 +62,71 @@
                 @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.Label("Phone Number Details:", new { @class = "control-label col-md-2" })
+        @*<div id="PhoneNumberDetails">
+                <div class="form-group">
+                    @Html.Label("Phone Number Details:", new { @class = "control-label col-md-2" })
+                </div>
+                @foreach (var item in Model.phoneNumbers)
+                {
+                    <div class="form-group">
+                        @Html.Label("Type", new { @class = "control-label col-md-2" })
+                        <span class="col-md-10">
+                            @Html.TextBox(item.type, item.type, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.phoneNumbers, "", new { @class = "text-danger" })
+                        </span>
+                        @Html.Label("Number", new { @class = "control-label col-md-2" })
+                        <span class="col-md-10">
+                            @Html.TextBox(item.Number, item.Number, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.phoneNumbers, "", new { @class = "text-danger" })
+                        </span>
+                        <div>@Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + "," + Model.ID + ")" })</div>
+                    </div>
+                }
+            </div>*@
+        <div id="PhoneNumberDetails">
+            @*@Html.Partial("_AddNewPhoneNumber", Model.phoneNumbers)*@
+            @Html.Partial("_ViewPhoneNumber", Model.phoneNumbers)
         </div>
-        @foreach (var item in Model.phoneNumbers)
-        {
-            <div class="form-group">
-                @Html.Label("Type", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextBox(item.type, item.type, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.phoneNumbers, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div>@Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + "," + Model.ID + ")" })</div>
-            @*<input type="hidden" id="hiddenCommentID" value="@item.ID" />*@
-            <div class="form-group">
-                @Html.Label("Number", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextBox(item.Number, item.Number, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.phoneNumbers, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        }
-        @Html.Label("text", new { @class = "control-label col-md-2", @id = "someText" })
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
-            </div>
+        <div id="EditPhoneNumberDetails">
+            @*@Html.Partial("_AddNewPhoneNumber", Model.phoneNumbers)*@
+            @Html.Partial("_EditPhoneNumber", Model)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+            @Html.Label("View Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(true,this)", @id = "ViewButton" })
+            @Html.Label("Hide Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(true,this)", @id = "HideButton" })
+            @Html.ActionLink("Add Phone Number", null, null, new { @class = "btn btn-default" })
+            @Html.Label("Edit Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(false,this)" })
+            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+
         </div>
     </div>
 }
 <script>
-    function numberDelete(id, contactId) {
-        alert("Hi");
-        alert("please");
-        alert("Entered the API delete request function");
-        $.ajax({
-            url: "/api/Contacts/" + contactId + "?pid=" + id,
-            method: "DELETE",
-            async: false,
-            success: function (data) {
-                alert("Number Deleted");
-                alert(data);
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                if (xhr.status == 404) {
-                    alert(thrownError);
-                    alert("Error occured");
-                    $('#someText').text('Cannot find this record');
-                }
+    function showPhoneNumberDetails(hideorshow, el) {
+
+        if (hideorshow) {
+            $('#PhoneNumberDetails input').attr('readonly', 'readonly');
+            if (el.textContent == 'View Phone Number') {
+                $("#PhoneNumberDetails").css("display", "block");
+                $('#HideButton').css("display", "inline");
+                $('#ViewButton').css("display", "none");
             }
-        });
+            else {
+                $("#PhoneNumberDetails").css("display", "none");
+                $("#EditPhoneNumberDetails").css("display", "none");
+                $('#HideButton').css("display", "none");
+                $('#ViewButton').css("display", "inline");
+            }
+        }
+        else {
+            $("#EditPhoneNumberDetails").css("display", "block");
+            $("#PhoneNumberDetails").css("display", "none");
+            $('#PhoneNumberDetails input').removeAttr("readonly");
+            $('#HideButton').css("display", "inline");
+            $('#ViewButton').css("display", "none");
+        }
     }
 </script>

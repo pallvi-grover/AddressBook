@@ -87,7 +87,7 @@ namespace AddressBook.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            return View(new ContactsInfo());
         }
 
         //[HttpPost]
