@@ -42,8 +42,6 @@
                             type: "GET",
                             headers: authHeaders,
                             success: function (response) {
-                                $("#loginEmail").val("");
-                                $("#loginPwd").val("");
                                 window.location.href = '/Home/Index';
                             }
                         });

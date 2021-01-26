@@ -85,6 +85,11 @@ namespace AddressBook.Controllers
             return View();
         }
 
+        public ActionResult Create()
+        {
+            return View();
+        }
+
         //[HttpPost]
         //public ActionResult Login(string button, FormCollection collection)
         //{
