@@ -12,14 +12,14 @@
         text-align: center;
         padding: 10px;
     }
-    #phoneNumberAddition
-    {
-        display:none;
-    }
 
+    #phoneNumberAddition {
+        display: none;
+    }
 </style>
 
 <table id="phoneNumberAddition" class="table table-hover table-responsive">
+    <caption class="control-label col-md-2">Phone Numbers</caption>
     <tr>
         <th>Type</th>
         <th>Number</th>
@@ -62,6 +62,9 @@
     $(document).ready(function () {
         $('#tbody').on('click', '.remove', function () {
             $(this).closest('tr').remove();
-        }); 
+            var rowcount = $('#phoneNumberAddition tr').length;
+            if (rowcount <= 1)
+                $("#phoneNumberAddition").css("display", "none");
+        });
     })
 </script>
