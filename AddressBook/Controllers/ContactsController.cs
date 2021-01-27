@@ -82,7 +82,8 @@ namespace AddressBook.Controllers
             db.ContactsInfos.Add(contactsInfo);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = contactsInfo.ID }, contactsInfo);
+            //return CreatedAtRoute("DefaultApi", new { id = contactsInfo.ID }, contactsInfo);
+            return Ok();
         }
 
         // DELETE: api/Contacts/5
