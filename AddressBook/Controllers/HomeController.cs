@@ -149,5 +149,42 @@ namespace AddressBook.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Login", "Home");
         }
+
+        [HttpPost]
+        public ActionResult Index(HttpPostedFileBase postedFile)
+        {
+            var allowedExtensions = new[] {
+            ".Jpg", ".png", ".jpg", "jpeg", ".JPG"
+        };
+            //Extract Image File Name.
+            string fileName = System.IO.Path.GetFileName(postedFile.FileName);
+            string fileId = Guid.NewGuid().ToString().Replace("-", "");
+            var ext = System.IO.Path.GetExtension(postedFile.FileName);
+            if (allowedExtensions.Contains(ext)) //check what type of extension  
+            {
+                string name = System.IO.Path.GetFileNameWithoutExtension(fileName); //getting file name without extension  
+                string myfile = name + "_" + fileId + ext; //appending the name with id  
+                                                           // store the file inside ~/project folder(Img)  
+                var filePath = System.IO.Path.Combine(Server.MapPath("~/ContactImages"), myfile);
+                //Save the Image File in Folder.
+                postedFile.SaveAs(filePath);
+
+                //Insert the Image File details in Table.
+
+                //db.ContactsInfos.Add(new ContactsInfo
+                //{
+                //    imageURL = filePath
+                //});
+                //db.SaveChanges();
+            }
+
+            //Redirect to Index Action.
+            return RedirectToAction("Index");
+        }
+        //public ActionResult SummaryPanel_Partial()
+        //{
+        //    // ...
+        //    return PartialView(model);
+        //}
     }
 }

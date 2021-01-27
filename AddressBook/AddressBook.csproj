@@ -213,6 +213,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101220003055_InitialCreate.cs" />
+    <Compile Include="Migrations\202101220003055_InitialCreate.designer.cs">
+      <DependentUpon>202101220003055_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202101262349397_init.cs" />
+    <Compile Include="Migrations\202101262349397_init.designer.cs">
+      <DependentUpon>202101262349397_init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\contactsDBContext.cs" />
@@ -288,6 +297,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ContactImages\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -317,6 +327,14 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202101220003055_InitialCreate.resx">
+      <DependentUpon>202101220003055_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101262349397_init.resx">
+      <DependentUpon>202101262349397_init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

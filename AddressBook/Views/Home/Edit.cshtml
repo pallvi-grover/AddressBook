@@ -9,20 +9,29 @@
         display: none;
     }
 
-    /* #HideButton {
-        display: none;
+    .equal {
+        float: left;
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        /*position:relative;*/
+    }
+
+/*    #imageDiv {
+        padding: 130px;
+        max-height: 400px;
     }*/
 </style>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
+    <div class="form-horizontal equal">
         <h2 class="page-name">Edit the Contacts Information</h2>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ID)
-
         <div class="form-group">
             @Html.Label("Name", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -32,7 +41,7 @@
         </div>
 
         <div class="form-group">
-            @Html.Label("Nick Name", new { @class = "control-label col-md-2" })
+            @Html.Label("NickName ", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
@@ -48,7 +57,7 @@
         </div>
 
         <div class="form-group">
-            @Html.Label("Date of Birth", new { @class = "control-label col-md-2" })
+            @Html.Label("DOB ", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextBoxFor(model => model.dob, "{0:yyyy-MM-dd}", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
@@ -62,45 +71,30 @@
                 @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
             </div>
         </div>
-        @*<div id="PhoneNumberDetails">
-                <div class="form-group">
-                    @Html.Label("Phone Number Details:", new { @class = "control-label col-md-2" })
-                </div>
-                @foreach (var item in Model.phoneNumbers)
-                {
-                    <div class="form-group">
-                        @Html.Label("Type", new { @class = "control-label col-md-2" })
-                        <span class="col-md-10">
-                            @Html.TextBox(item.type, item.type, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.phoneNumbers, "", new { @class = "text-danger" })
-                        </span>
-                        @Html.Label("Number", new { @class = "control-label col-md-2" })
-                        <span class="col-md-10">
-                            @Html.TextBox(item.Number, item.Number, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.phoneNumbers, "", new { @class = "text-danger" })
-                        </span>
-                        <div>@Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + "," + Model.ID + ")" })</div>
-                    </div>
-                }
-            </div>*@
         <div id="PhoneNumberDetails">
-            @*@Html.Partial("_AddNewPhoneNumber", Model.phoneNumbers)*@
             @Html.Partial("_ViewPhoneNumber", Model.phoneNumbers)
         </div>
         <div id="EditPhoneNumberDetails">
-            @*@Html.Partial("_AddNewPhoneNumber", Model.phoneNumbers)*@
             @Html.Partial("_EditPhoneNumber", Model)
         </div>
     </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
-            @Html.Label("View Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(true,this)", @id = "ViewButton" })
-            @Html.Label("Hide Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(true,this)", @id = "HideButton" })
-            @Html.ActionLink("Add Phone Number", null, null, new { @class = "btn btn-default" })
-            @Html.Label("Edit Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(false,this)" })
-            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+    <div class="equal">
+        <div class="form-group img-responsive image-container">
+            <img id="user_img" alt="@Model.fullName" src="@Url.Content(Model.imageURL)" height="250px" width="200px" style="border:solid" />
+            <input type="file" title="Upload Image" id="file" name="file" onchange="show(this)" />
+        </div>
+    </div>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+                @Html.Label("View Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(true,this)", @id = "ViewButton" })
+                @Html.Label("Hide Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(true,this)", @id = "HideButton" })
+                @Html.ActionLink("Add Phone Number", null, null, new { @class = "btn btn-default" })
+                @Html.Label("Edit Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(false,this)" })
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
 
+            </div>
         </div>
     </div>
 }
@@ -127,6 +121,15 @@
             $('#PhoneNumberDetails input').removeAttr("readonly");
             $('#HideButton').css("display", "inline");
             $('#ViewButton').css("display", "none");
+        }
+    }
+    function show(input) {
+        if (input.files && input.files[0]) {
+            var filerdr = new FileReader();
+            filerdr.onload = function (e) {
+                $('#user_img').attr('src', e.target.result);
+            }
+            filerdr.readAsDataURL(input.files[0]);
         }
     }
 </script>

@@ -22,6 +22,7 @@ namespace AddressBook.Models
         public DateTime dob { get; set; }
         [StringLength(500)]
         public string address { get; set; }
+        public string imageURL { get; set; }
 
         public ICollection<PhoneNumbers> phoneNumbers { get; set; }
     }
