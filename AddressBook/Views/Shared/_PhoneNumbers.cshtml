@@ -31,7 +31,7 @@
 
 <div class="form-group">
     <div class="col-md-10" id="addBtn">
-        <a href="#link">Add Number</a>
+        <a href="#link" class = "btn btn-default">Add New Number</a>
     </div>
 </div>
 
@@ -44,11 +44,11 @@
             $('#tbody').append(`<tr id="R${++rowIdx}">
             <td>
                 @Html.Editor("Type ", new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessage("Type ", "", new { @class = "text-danger" })
+                @Html.ValidationMessage("item_type", "", new { @class = "text-danger" })
             </td>
             <td>
                 @Html.Editor("Number ", new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessage("Number ", "", new { @class = "text-danger" })
+                @Html.ValidationMessage("item_Number", "", new { @class = "text-danger" })
             </td>
     <td class="text-center">
         <a href="#link" class="remove">Remove</a>
@@ -63,8 +63,12 @@
         $('#tbody').on('click', '.remove', function () {
             $(this).closest('tr').remove();
             var rowcount = $('#phoneNumberAddition tr').length;
-            if (rowcount <= 1)
+            if (rowcount <= 1) {
                 $("#phoneNumberAddition").css("display", "none");
+                //$('#HideButton').css("pointer-events", "visible");
+                //$('#ViewButton').css("pointer-events", "visible");
+                //$('.common').removeAttr('disabled');
+            }
         });
     })
 </script>

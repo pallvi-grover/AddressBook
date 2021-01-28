@@ -90,53 +90,6 @@ namespace AddressBook.Controllers
             return View(new ContactsInfo());
         }
 
-        //[HttpPost]
-        //public ActionResult Login(string button, FormCollection collection)
-        //{
-        //    // This will clear whatever form items have been populated        
-        //    if (button == "Cancel")  //I can see code is executed here, I need to clear all UI fields starts from there.
-        //    {
-        //        //here, I need to clear all Input text fields, text, listbox, dropdownlist, etc.   
-        //        ModelState.Clear();
-        //        return View(); //this will return the original UI razor view,
-
-        //    }
-        //    return View();
-        //}
-
-        //[ChildActionOnly]
-        //public ActionResult RenderMenu(int id)
-        //{
-        //    var employee = db.numbers.Where(m => m.contactId == id);
-        //    return PartialView("_PhoneNumberRender",employee);
-        //}
-
-        //[HttpPost]
-        //public void Delete(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        var term = db.numbers.Where(x => x.ID == id).First();
-        //        db.numbers.Remove(term);
-        //        db.SaveChanges();
-        //        //return View();
-        //        //return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        //return View();
-        //    }
-        //}
-
-        //[HttpDelete]
-        //public JsonResult Delete(int id)
-        //{
-        //    //var term = db.numbers.Where(x => x.ID == id).First();
-        //    //db.numbers.Remove(term);
-        //    //db.SaveChanges();
-        //    return Json("Response from Delete");
-        //}
-
         public ActionResult Register()
         {
             return View();
@@ -182,10 +135,6 @@ namespace AddressBook.Controllers
             return RedirectToAction("Index");
         }
 
-        //public ActionResult SummaryPanel_Partial()
-        //{
-        //    // ...
-        //    return PartialView(model);
-        //}
+
     }
 }
