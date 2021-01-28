@@ -81,8 +81,26 @@ namespace AddressBook.Controllers
             }
             
             db.ContactsInfos.Add(contactsInfo);
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                var ex = e.InnerException.InnerException.Message;
 
+                if (ex.Contains("The conversion of a datetime2 data type to a datetime data type resulted in an out-of-range value"))
+                {
+                    return BadRequest("DOB Value Out of Range.");
+                }
+                else
+                {
+                    return BadRequest(ex.ToString());
+                }
+                //The conversion of a datetime2 data type to a datetime data type resulted in an out-of-range value
+
+               
+            }
             //return CreatedAtRoute("DefaultApi", new { id = contactsInfo.ID }, contactsInfo);
             return Ok();
         }
