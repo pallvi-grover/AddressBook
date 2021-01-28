@@ -72,7 +72,14 @@
             </div>
         </div>
         <div id="PhoneNumberDetails">
-            @Html.Partial("_ViewPhoneNumber", Model.phoneNumbers)
+            @if (Model.phoneNumbers != null)
+            {
+                @Html.Partial("_ViewPhoneNumber", Model.phoneNumbers)
+            }
+            else
+            {
+             @Html.Partial("_ViewPhoneNumber", new ViewDataDictionary())
+            }
         </div>
         <div id="EditPhoneNumberDetails">
             @Html.Partial("_EditPhoneNumber", Model)
