@@ -110,29 +110,34 @@ namespace AddressBook.Controllers
             var allowedExtensions = new[] {
             ".Jpg", ".png", ".jpg", "jpeg", ".JPG"
         };
-            //Extract Image File Name.
-            string fileName = System.IO.Path.GetFileName(file.FileName);
-            //string fileId = Guid.NewGuid().ToString().Replace("-", "");
-            var ext = System.IO.Path.GetExtension(file.FileName);
-            if (allowedExtensions.Contains(ext)) //check what type of extension  
+            if (file != null)
             {
-                string name = System.IO.Path.GetFileNameWithoutExtension(fileName); //getting file name without extension  
-                string myfile = name + ext; //appending the name with id  
-                                                           // store the file inside ~/project folder(Img)  
-                var filePath = System.IO.Path.Combine(Server.MapPath("~/ContactImages"), myfile);
-                //Save the Image File in Folder.
-                file.SaveAs(filePath);
+                //Extract Image File Name.
+                string fileName = System.IO.Path.GetFileName(file.FileName);
+                //string fileId = Guid.NewGuid().ToString().Replace("-", "");
+                var ext = System.IO.Path.GetExtension(file.FileName);
+                if (allowedExtensions.Contains(ext)) //check what type of extension  
+                {
+                    string name = System.IO.Path.GetFileNameWithoutExtension(fileName); //getting file name without extension  
+                    string myfile = name + ext; //appending the name with id  
+                                                // store the file inside ~/project folder(Img)  
+                    var filePath = System.IO.Path.Combine(Server.MapPath("~/ContactImages"), myfile);
+                    //Save the Image File in Folder.
+                    file.SaveAs(filePath);
 
-                //Insert the Image File details in Table.
+                    //Insert the Image File details in Table.
 
-                //db.ContactsInfos.Add(new ContactsInfo
-                //{
-                //    imageURL = filePath
-                //});
-                //db.SaveChanges();
+                    //db.ContactsInfos.Add(new ContactsInfo
+                    //{
+                    //    imageURL = filePath
+                    //});
+                    //db.SaveChanges();
+                }
+                //Redirect to Index Action.
+                return RedirectToAction("Index");
             }
-            //Redirect to Index Action.
-            return RedirectToAction("Index");
+            else
+                return View();
         }
 
 
