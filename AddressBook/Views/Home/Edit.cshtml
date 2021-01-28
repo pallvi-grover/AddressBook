@@ -97,7 +97,7 @@
     <div class="form-horizontal">
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <button id="create" class="btn btn-default" onclick="location.href='@Url.Action("saveImage", "Home")'">Create</button>
+                <button id="create" class="btn btn-default">Save</button>
                 @Html.Label("View Phone Number", new { @class = "btn btn-default common", onclick = "showPhoneNumberDetails(true,this)", @id = "ViewButton" })
                 @Html.Label("Hide Phone Number", new { @class = "btn btn-default common", onclick = "showPhoneNumberDetails(true,this)", @id = "HideButton" })
                 @*@Html.Label("Add Phone Number", new { @class = "btn btn-default", onclick = "addPhoneNumber()" })*@
@@ -211,7 +211,7 @@
                     url: "/api/Contacts/" + contactID + "?pid=" + phoneId,
                     method: "PUT",
                     data: item,
-                    async: true,
+                    async: false,
                     success: function (data) {
                         //alert(item);
                     },
@@ -251,9 +251,9 @@
                     url: "/api/Contacts/" + contactID,
                     method: "POST",
                     data: item,
-                    async: true,
+                    async: false,
                     success: function (data) {
-                        //alert(item);
+                        
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         if (xhr.status == 404) {
@@ -280,9 +280,9 @@
                 url: "/api/Contacts/" + contactID,
                 method: "PUT",
                 data: data,
-                async: true,
+                async: false,
                 success: function (data) {
-                    //alert(data);
+                    alert("Saved Successfully.");
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     if (xhr.status == 404) {

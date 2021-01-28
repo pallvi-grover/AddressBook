@@ -47,16 +47,12 @@
 </div>
 <script>
     function numberDelete(contactId) {
-        alert("Hi");
-        alert("please");
-        alert("Entered the API delete request function");
         $.ajax({
             url: "/api/Contacts/" + contactId,
             method: "DELETE",
             async: false,
             success: function (data) {
                 alert("Number Deleted");
-                alert(data);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 if (xhr.status == 404) {
