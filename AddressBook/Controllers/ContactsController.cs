@@ -6,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AddressBook.Models;
@@ -19,7 +20,7 @@ namespace AddressBook.Controllers
         // GET: api/Contacts
         public IQueryable<ContactsInfo> GetContactsInfos()
         {
-            return db.ContactsInfos;
+            return db.ContactsInfos.OrderBy(i => i.fullName);
         }
 
         // GET: api/Contacts/5
@@ -78,7 +79,7 @@ namespace AddressBook.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            
             db.ContactsInfos.Add(contactsInfo);
             db.SaveChanges();
 
@@ -103,7 +104,7 @@ namespace AddressBook.Controllers
         }
 
         [ResponseType(typeof(ContactsInfo))]
-        public IHttpActionResult DeletePhoneNumber(int id,int pid)
+        public IHttpActionResult DeletePhoneNumber(int id, int pid)
         {
             PhoneNumbers contactsInfo = db.numbers.Find(pid);
             if (contactsInfo == null)
