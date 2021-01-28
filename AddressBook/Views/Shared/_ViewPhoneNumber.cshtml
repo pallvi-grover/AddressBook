@@ -14,8 +14,10 @@
                 </th>
                 <th>Number</th>
             </tr>
-            @foreach (var item in Model)
+            @if (Model != null)
             {
+                foreach (var item in Model)
+                {
 
                 <tr>
                     <td>
@@ -32,8 +34,8 @@
                         @Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + "," + Model.ID + ")" })
                     </td>*@
                 </tr>
+                }
             }
-
         </table>
     </div>
 }
