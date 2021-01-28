@@ -8,74 +8,83 @@
     <title>Create</title>
 </head>
 <body>
-    @using (Html.BeginForm("Index", "Home"))
+    @using (Html.BeginForm("Create", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h2 class="page-name">Create New Contact</h2>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <h2 class="page-name">Create New Contact</h2>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.Label("NickName ", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label("NickName ", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.Label("Email ID", htmlAttributes: new { @class = "control-label col-md-2", placeholder = "example@xyz.com" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label("Email ID", htmlAttributes: new { @class = "control-label col-md-2", placeholder = "example@xyz.com" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.Label("DOB ", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control", placeholder = "MM/dd/yyyy" } })
-                @Html.LabelFor(model => model.dob, "", new { @class = "text-danger", @id = "errormsg" })
+
+            <div class="form-group">
+                @Html.Label("DOB ", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control", placeholder = "MM/dd/yyyy" } })
+                    @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
+                </div>
+
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.Label("Address ", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label("Address ", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-
-        <div>
-            @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
-        </div>
+            <div class="form-group">
+                @Html.Label("Image Path ", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="file" title="Upload Image" id="file" name="file" />
+                    @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div>
+                @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
+            </div>
 
         <label id="error" class = "text-danger"></label>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button id="create" class="btn btn-default">Create</button>
-                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
-            </div>
-        </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button id="create" class="btn btn-default">Create</button>
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+                </div>
 
-    </div>
+            </div>
+
+        </div>
     }
 
     <script>
         $(document).ready(function () {
-            $("#create").on('click', function () {   
-                var jsonObj=[],type = [],number = [];
+            $("#create").on('click', function () {
+                var jsonObj = [], type = [], number = [];
                 $("tr > td > input#Type_").each(function (index, value) {
                     type.push($(value).val().trim());
                 });
@@ -89,14 +98,19 @@
                     jsonObj.push(item);
 
                 });
+                if ($("#file").val().trim() != "")
+                    var length = $("#file").val().trim().split("\\").length - 1;
+
                 var data = {
                     "fullName": $("#fullName").val().trim(),
                     "nickName": $("#nickName").val().trim(),
                     "emailID": $("#emailID").val().trim(),
                     "dob": $("#dob").val().trim(),
                     "address": $("#address").val().trim(),
+                    "ImageURL": $("#file").val().trim() == "" ? "~/ContactImages/defaultImage.JPG" : "~/ContactImages/" + $("#file").val().trim().split("\\")[length],
                     "phoneNumbers": jsonObj
                 };
+
         $.ajax({
             url: "/api/Contacts/",
             method: "POST",
@@ -119,6 +133,7 @@
 
             }
         });
+
             })
         })
     </script>
