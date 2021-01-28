@@ -51,7 +51,7 @@ namespace AddressBook.Controllers
             }
 
             db.Entry(contactsInfo).State = EntityState.Modified;
-
+            
             try
             {
                 db.SaveChanges();
@@ -59,6 +59,40 @@ namespace AddressBook.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 if (!ContactsInfoExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutPhoneNumber(int id, int pid,PhoneNumbers phoneNumbers)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (pid != phoneNumbers.ID)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(phoneNumbers).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ContactsInfoExists(pid))
                 {
                     return NotFound();
                 }
@@ -101,6 +135,20 @@ namespace AddressBook.Controllers
 
                
             }
+            //return CreatedAtRoute("DefaultApi", new { id = contactsInfo.ID }, contactsInfo);
+            return Ok();
+        }
+
+        public IHttpActionResult PostPhoneNumber(int id,PhoneNumbers phoneno)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            db.numbers.Add(phoneno);
+            db.SaveChanges();
+
             //return CreatedAtRoute("DefaultApi", new { id = contactsInfo.ID }, contactsInfo);
             return Ok();
         }

@@ -18,12 +18,12 @@
         /*position:relative;*/
     }
 
-/*    #imageDiv {
+    /*    #imageDiv {
         padding: 130px;
         max-height: 400px;
     }*/
 </style>
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -71,6 +71,9 @@
                 @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
             </div>
         </div>
+        <div id="AddPhoneNumberDetails">
+            @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
+        </div>
         <div id="PhoneNumberDetails">
             @if (Model.phoneNumbers != null)
             {
@@ -94,11 +97,11 @@
     <div class="form-horizontal">
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-                @Html.Label("View Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(true,this)", @id = "ViewButton" })
-                @Html.Label("Hide Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(true,this)", @id = "HideButton" })
-                @Html.ActionLink("Add Phone Number", null, null, new { @class = "btn btn-default" })
-                @Html.Label("Edit Phone Number", new { @class = "btn btn-default", onclick = "showPhoneNumberDetails(false,this)" })
+                <button id="create" class="btn btn-default" onclick="location.href='@Url.Action("saveImage", "Home")'">Create</button>
+                @Html.Label("View Phone Number", new { @class = "btn btn-default common", onclick = "showPhoneNumberDetails(true,this)", @id = "ViewButton" })
+                @Html.Label("Hide Phone Number", new { @class = "btn btn-default common", onclick = "showPhoneNumberDetails(true,this)", @id = "HideButton" })
+                @*@Html.Label("Add Phone Number", new { @class = "btn btn-default", onclick = "addPhoneNumber()" })*@
+                @Html.Label("Edit Phone Number", new { @class = "btn btn-default common", onclick = "showPhoneNumberDetails(false,this)" })
                 @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
 
             </div>
@@ -106,20 +109,40 @@
     </div>
 }
 <script>
+    //$(document).ready(function () {
+    //    $("#addBtn").click(function () {
+    //        alert("The paragraph was clicked.");
+    //        $('.common').attr('disabled', 'disabled');
+    //        //$('#ViewButton').css("pointer-events", "none");
+    //    });
+    //});
+    //$(document).ready(function () {
+    //    $(".common").click(function () {
+    //        alert("The paragraph was clicked.");
+    //        $('#newNumber').css("pointer-events", "none");
+    //    });
+    //});
+    //$(document).ready(function () {
+    //    $(".common").click(function () {
+    //        alert("The paragraph was clicked.");
+    //        $('#newNumber').css("pointer-events", "none");
+    //    });
+    //});
     function showPhoneNumberDetails(hideorshow, el) {
-
         if (hideorshow) {
             $('#PhoneNumberDetails input').attr('readonly', 'readonly');
             if (el.textContent == 'View Phone Number') {
                 $("#PhoneNumberDetails").css("display", "block");
                 $('#HideButton').css("display", "inline");
                 $('#ViewButton').css("display", "none");
+                $('#addBtn').attr('disabled', 'disabled');
             }
             else {
                 $("#PhoneNumberDetails").css("display", "none");
                 $("#EditPhoneNumberDetails").css("display", "none");
                 $('#HideButton').css("display", "none");
                 $('#ViewButton').css("display", "inline");
+                $('#addBtn').removeAttr('disabled');
             }
         }
         else {
@@ -128,8 +151,10 @@
             $('#PhoneNumberDetails input').removeAttr("readonly");
             $('#HideButton').css("display", "inline");
             $('#ViewButton').css("display", "none");
+            $('#addBtn').attr('disabled', 'disabled');
         }
     }
+
     function show(input) {
         if (input.files && input.files[0]) {
             var filerdr = new FileReader();
@@ -139,4 +164,135 @@
             filerdr.readAsDataURL(input.files[0]);
         }
     }
+
+
+    $(document).ready(function () {
+        $("#create").on('click', function () {
+            var jsonObj = [], type = [], number = [], id = [];
+            $("tr > td > input#item_type").each(function (index, value) {
+                type.push($(value).val().trim());
+            });
+            $("tr > td > input#item_Number").each(function (index, value) {
+                number.push($(value).val().trim());
+            });
+            $("tr > td > input#item_ID").each(function (index, value) {
+                id.push($(value).val().trim());
+            });
+            $.each(type, function (index, value) {
+                item = {};
+                item["ID"] = id[index];
+                item["type"] = type[index];
+                item["Number"] = number[index];
+                item["contactId"] = $('#ID').val().trim();
+                jsonObj.push(item);
+
+            });
+            //if ($("#file").val().trim() != "")
+            //    var length = $("#file").val().trim().split("\\").length - 1;
+
+            //var data = {
+            //    "fullName": $("#fullName").val().trim(),
+            //    "nickName": $("#nickName").val().trim(),
+            //    "emailID": $("#emailID").val().trim(),
+            //    "dob": $("#dob").val().trim(),
+            //    "address": $("#address").val().trim(),
+            //    "ImageURL": $("#file").val().trim() == "" ? "~/ContactImages/defaultImage.JPG" : "~/ContactImages/" + $("#file").val().trim().split("\\")[length],
+            //    "phoneNumbers": jsonObj
+            //};
+
+            //alert(JSON.stringify(jsonObj[0].ID));
+
+            jsonObj.forEach(putApi);
+
+            function putApi(item, index) {
+                var contactID = jsonObj[index].contactId;
+                var phoneId = jsonObj[index].ID;
+                $.ajax({
+                    url: "/api/Contacts/" + contactID + "?pid=" + phoneId,
+                    method: "PUT",
+                    data: item,
+                    async: true,
+                    success: function (data) {
+                        //alert(item);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        if (xhr.status == 404) {
+                            alert(thrownError);
+                            alert("Error occured");
+                            $('#someText').text('Cannot find this record');
+                        }
+                    }
+                });
+            }
+
+            var jsonObj = [], type = [], number = [];
+            $("tr > td > input#Type_").each(function (index, value) {
+                type.push($(value).val().trim());
+            });
+            $("tr > td > input#Number_").each(function (index, value) {
+                number.push($(value).val().trim());
+            });
+            //$("tr > td > input#item_ID").each(function (index, value) {
+            //    id.push($(value).val().trim());
+            //});
+            $.each(type, function (index, value) {
+                item = {};
+                //item["ID"] = id[index];
+                item["type"] = type[index];
+                item["Number"] = number[index];
+                item["contactId"] = $('#ID').val().trim();
+                jsonObj.push(item);
+            });
+            jsonObj.forEach(postAPI);
+            function postAPI(item, index) {
+                var contactID = jsonObj[index].contactId;
+
+                $.ajax({
+                    url: "/api/Contacts/" + contactID,
+                    method: "POST",
+                    data: item,
+                    async: true,
+                    success: function (data) {
+                        //alert(item);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        if (xhr.status == 404) {
+                            alert(thrownError);
+                            alert("Error occured");
+                            $('#someText').text('Cannot find this record');
+                        }
+                    }
+                });
+            }
+            if ($("#file").val().trim() != "")
+                var length = $("#file").val().trim().split("\\").length - 1;
+            var data = {
+                "ID": $('#ID').val().trim(),
+                "fullName": $("#fullName").val().trim(),
+                "nickName": $("#nickName").val().trim(),
+                "emailID": $("#emailID").val().trim(),
+                "dob": $("#dob").val().trim(),
+                "address": $("#address").val().trim(),
+                "ImageURL": $("#file").val().trim() == "" ? "~/ContactImages/defaultImage.JPG" : "~/ContactImages/" + $("#file").val().trim().split("\\")[length],
+            };
+            var contactID = $('#ID').val().trim();
+            $.ajax({
+                url: "/api/Contacts/" + contactID,
+                method: "PUT",
+                data: data,
+                async: true,
+                success: function (data) {
+                    //alert(data);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    if (xhr.status == 404) {
+                        alert(thrownError);
+                        alert("Error occured");
+                        $('#someText').text('Cannot find this record');
+                    }
+                }
+            });
+
+        })
+    })
 </script>

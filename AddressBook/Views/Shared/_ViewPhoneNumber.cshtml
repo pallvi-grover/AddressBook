@@ -8,6 +8,7 @@
         <hr />
         <table class="table table-hover table-responsive">
             <tr>
+                <th></th>
                 <th>
                     Type
                 </th>
@@ -20,11 +21,14 @@
 
                 <tr>
                     <td>
-                        @*@Html.DropDownListFor(a => item.type, select, new { @class = "form-control" })*@
-                        @Html.EditorFor(a => item.type, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.HiddenFor(model => item.ID)
                     </td>
                     <td>
-                        @Html.EditorFor(a => item.Number, new { htmlAttributes = new { @class = "form-control" } })
+                        @*@Html.DropDownListFor(a => item.type, select, new { @class = "form-control" })*@
+                        @Html.EditorFor(a => item.type, new { htmlAttributes = new { @class = "form-control",@id="typeView" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(a => item.Number, new { htmlAttributes = new { @class = "form-control", @id = "NumberView" } })
                     </td>
                     @*<td>
                         @Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + "," + Model.ID + ")" })
