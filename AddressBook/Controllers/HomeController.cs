@@ -25,13 +25,13 @@ namespace AddressBook.Controllers
         //}
         //private contactsDBContext db = new contactsDBContext();
         private ApplicationDbContext db = new ApplicationDbContext();
-        
+
 
         public async Task<ActionResult> Index(string email)
         {
             if (Request.IsAuthenticated || email != null)
             {
-                
+                ViewBag.Authenticate = true;
                 List<ContactsInfo> test = new List<ContactsInfo>();
                 var userId = db.Users.Where(i => i.Email == email).Select(i => i.Id).FirstOrDefault();
                 using (var client = new HttpClient())
@@ -63,6 +63,7 @@ namespace AddressBook.Controllers
 
         public ActionResult Edit(int id)
         {
+            ViewBag.Authenticate = true;
             string email = string.Empty;
             if (TempData.ContainsKey("UserID"))
                 email = TempData["UserID"] as string;
@@ -76,18 +77,17 @@ namespace AddressBook.Controllers
                 return View("Login");
 
         }
-        
+
 
         [AllowAnonymous]
         public ActionResult Login()
         {
-            Response.Cache.SetExpires(DateTime.Now);
-            Response.Cache.SetCacheability(HttpCacheability.NoCache);
             return View();
         }
 
         public ActionResult Create()
         {
+            ViewBag.Authenticate = true;
             string email = string.Empty;
             if (TempData.ContainsKey("UserID"))
                 email = TempData["UserID"] as string;
@@ -114,7 +114,13 @@ namespace AddressBook.Controllers
             Session.Abandon();
             HttpContext.User =
     new GenericPrincipal(new GenericIdentity(string.Empty), null);
-            return RedirectToAction("Login", "Home");
+            if (!Request.IsAuthenticated)
+            {
+                ViewBag.Authenticate = Request.IsAuthenticated;
+                return RedirectToAction("Login", "Home");
+            }
+            else
+                return View();
         }
 
         [HttpPost]
@@ -148,7 +154,7 @@ namespace AddressBook.Controllers
                     //db.SaveChanges();
                 }
                 //Redirect to Index Action.
-                
+
             }
             //return RedirectToAction("Index");
             return View();

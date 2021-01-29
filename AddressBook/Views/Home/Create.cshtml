@@ -137,14 +137,8 @@
                         window.location.href = '/Home/Index?email=' + $("#UserEmailId").val();
 
                     },
-                    //error: function (xhr, ajaxOptions, thrownError) {
-                    //    if (xhr.status == 404) {
-                    //        alert(thrownError);
-                    //        alert("Error occured");
-                    //        $('#someText').text('Cannot find this record');
-                    //    }
-                    //}
                     error: function (request, message, error) {
+
                         if (request.responseJSON != null && request.status == 400) {
 
                             var response = null;
@@ -170,9 +164,13 @@
                                 $("#error").html(errorsString);
 
                             }
-
-                            //$('#error').text(request.responseJSON.Message);
-                            //alert(request.responseJSON.Message)
+                    
+                            if (request.responseJSON.Message != null && errorsString == "" ) {
+                                if (request.responseJSON.Message.includes("duplicate"))
+                                     $('#error').text("Email ID already exists. Please enter unique email.");
+                                else
+                                    $('#error').text(request.responseJSON.Message);  
+                            }
                         }
                     }
                 });
