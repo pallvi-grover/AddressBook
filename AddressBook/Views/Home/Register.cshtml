@@ -1,4 +1,5 @@
-﻿@{
+﻿@using AddressBook.Models
+@{
     ViewBag.Title = "Login";
 }
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
@@ -20,23 +21,26 @@
         </div>
     </div>
     <div>
-    <label id="error" class="text-danger"></label>
-        </div>
+        <label id="error" class="text-danger"></label>
+    </div>
     <button id="register" class="btn btn-default">Submit</button>
     @Html.ActionLink("Cancel", "Login", null, new { @class = "btn btn-default" })
 </div>
 
 <script>
+    @{
+        ReferenceVariable test = new ReferenceVariable();
+    }
     $(document).ready(function () {
         $("#register").on('click', function () {
             var data = { Email: $("#txtEmail").val().trim(), Password: $("#textPwd").val().trim(), ConfirmPassword: $("#txtConfirmPwd").val().trim() };
             $.ajax({
-                url: "/api/Account/Register",
+                url: "@test.registerAPIURL",
                 type: 'POST',
                 data: data,
                 success: function (resp) {
                     alert("Registration Successfull. Please login to continue...")
-                    window.location.href = '/Home/Login';
+                    window.location.href = '@test.redirectToLoginPage';
                 },
                 error: function (request, message, error) {
                     var response = null;
@@ -68,36 +72,3 @@
         });
     })
 </script>
-@*//      $("#btnLogin").on('click', function () {
-    ////var data = { Email: $("#loginEmail").val().trim(), Password: $("#textPwd").val().trim(), ConfirmPassword: $("#loginPwd").val().trim() };
-    //$.ajax(
-    //{
-    //url: "/TOKEN",
-    //type: "POST",
-    //data: $.param({ grant_type: 'password', username: $("#loginEmail").val(), password: $("#loginPwd").val() }),
-    //headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    //success: function (resp) {
-    //sessionStorage.setItem('userName', resp.userName);
-    //sessionStorage.setItem('accessToken', resp.access_token);
-    //var authHeaders = {};
-    //authHeaders.Authorization = 'Bearer ' + resp.access_token;
-    //$.ajax({
-    //    url: "https://localhost:44336/api/values",
-    //type: "GET",
-    //headers: authHeaders,
-    //success: function (response) {
-    //$("#loginEmail").val("");
-    //$("#loginPwd").val("");
-    //$("#msg").text(response);
-    //}
-    //});
-
-    //},
-    //error: function () {
-    //$("#msg").text("Authentication failed");
-    //}
-    //})
-    //});
-
-
-    //})*@

@@ -1,4 +1,5 @@
-﻿@model AddressBook.Models.ContactsInfo
+﻿@using AddressBook.Models
+@model AddressBook.Models.ContactsInfo
 
 @{
     ViewBag.Title = "Edit";
@@ -27,81 +28,81 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal equal">
-    <h2 class="page-name">Edit the Contacts Information</h2>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.ID)
-    @Html.Hidden("UserId", TempData["UserID"].ToString())
-    @Html.Hidden("UserEmailId")
-    <div class="form-group">
-        @Html.Label("Name", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
+    <div class="form-horizontal equal">
+        <h2 class="page-name">Edit the Contacts Information</h2>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+        @Html.Hidden("UserId", TempData["UserID"].ToString())
+        @Html.Hidden("UserEmailId")
+        <div class="form-group">
+            @Html.Label("Name", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
+            </div>
+
+
         </div>
 
-
-    </div>
-
-    <div class="form-group">
-        @Html.Label("NickName ", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("NickName ", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.Label("Email ID", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-            @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Email ID", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.Label("DOB ", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.dob, "{0:yyyy-MM-dd}", new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("DOB ", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.dob, "{0:yyyy-MM-dd}", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.Label("Address ", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Address ", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
 
+            </div>
         </div>
-    </div>
-    <label id="someText" class="text-danger"></label>
-    <div id="AddPhoneNumberDetails">
-        @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
-    </div>
-    <div id="PhoneNumberDetails">
-        @if (Model.phoneNumbers != null)
-        {
-            @Html.Partial("_ViewPhoneNumber", Model.phoneNumbers)
-        }
-        else
-        {
-            @Html.Partial("_ViewPhoneNumber", new ViewDataDictionary())
-        }
-    </div>
-    <div id="EditPhoneNumberDetails">
-        @Html.Partial("_EditPhoneNumber", Model)
-    </div>
+        <label id="someText" class="text-danger"></label>
+        <div id="AddPhoneNumberDetails">
+            @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
+        </div>
+        <div id="PhoneNumberDetails">
+            @if (Model.phoneNumbers != null)
+            {
+                @Html.Partial("_ViewPhoneNumber", Model.phoneNumbers)
+            }
+            else
+            {
+                @Html.Partial("_ViewPhoneNumber", new ViewDataDictionary())
+            }
+        </div>
+        <div id="EditPhoneNumberDetails">
+            @Html.Partial("_EditPhoneNumber", Model)
+        </div>
 
-</div>
+    </div>
     <div class="equal">
         <div class="form-group img-responsive image-container">
             <img id="user_img" alt="@Model.fullName" src="@Url.Content(Model.imageURL)" height="230px" width="200px" style="border:solid" />
             <input type="file" title="Upload Image" id="file" name="file" onchange="show(this)" />
         </div>
     </div>
-  
+
     <div class="form-horizontal">
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -117,25 +118,9 @@
     </div>
 }
 <script>
-    //$(document).ready(function () {
-    //    $("#addBtn").click(function () {
-    //        alert("The paragraph was clicked.");
-    //        $('.common').attr('disabled', 'disabled');
-    //        //$('#ViewButton').css("pointer-events", "none");
-    //    });
-    //});
-    //$(document).ready(function () {
-    //    $(".common").click(function () {
-    //        alert("The paragraph was clicked.");
-    //        $('#newNumber').css("pointer-events", "none");
-    //    });
-    //});
-    //$(document).ready(function () {
-    //    $(".common").click(function () {
-    //        alert("The paragraph was clicked.");
-    //        $('#newNumber').css("pointer-events", "none");
-    //    });
-    //});
+@{
+        ReferenceVariable test = new ReferenceVariable();
+    }
     function showPhoneNumberDetails(hideorshow, el) {
         if (hideorshow) {
             $('#PhoneNumberDetails input').attr('readonly', 'readonly');
@@ -176,14 +161,14 @@
 
     $(document).ready(function () {
         $.ajax({
-                url: '/Home/getEmailId',
+                url: '@test.getEmailIDURL',
                 data: { userId: $("#UserId").val().trim() }
             }).done(function (data) {
                 $("#UserEmailId").val(data);
             });
             $("#Cancel").click(function(event){
        event.preventDefault();
-                window.location.href = "@Url.Action("Index", "Home")" + "?email=" + $("#UserEmailId").val();
+                window.location.href = "@test.redirectToIndexPage" + $("#UserEmailId").val();
     });
         $("#create").on('click', function () {
             var jsonObj = [], type = [], number = [], id = []; errorCount = 0;
@@ -209,13 +194,13 @@
 
             jsonObj.forEach(putApi);
 
-            
+
 
             function putApi(item, index) {
                 var contactID = jsonObj[index].contactId;
                 var phoneId = jsonObj[index].ID;
                 $.ajax({
-                    url: "/api/Contacts/" + contactID + "?pid=" + phoneId,
+                    url: "@test.postContactNumberAPIURL" + contactID + "?pid=" + phoneId,
                     method: "PUT",
                     data: item,
                     async: false,
@@ -259,7 +244,7 @@
                 var contactID = jsonObj[index].contactId;
 
                 $.ajax({
-                    url: "/api/Contacts/" + contactID,
+                    url: "@test.postContactNumberAPIURL" + contactID,
                     method: "POST",
                     data: item,
                     async: false,
@@ -289,11 +274,11 @@
             var image;
             if ($("#file").val().trim() != "") {
                 var length = $("#file").val().trim().split("\\").length - 1;
-                image = $("#file").val().trim() == "" ? "~/ContactImages/defaultImage.JPG" : "~/ContactImages/" + $("#file").val().trim().split("\\")[length];
+                image = $("#file").val().trim() == "" ? "@test.defaultImage" : "@test.imagePathURL" + $("#file").val().trim().split("\\")[length];
             }
             else {
                 var len = $("#user_img").attr("src").split("/").length;
-                image = $("#user_img").attr("src").split("/")[len - 1] == "" ? "~/ContactImages/defaultImage.JPG" : "~/ContactImages/" + $("#user_img").attr("src").split("/")[len - 1];
+                image = $("#user_img").attr("src") == "" ? "@test.defaultImage" : "@test.imagePathURL" + $("#user_img").attr("src").split("/")[len - 1];
             }
             var data = {
                 "ID": $('#ID').val().trim(),
@@ -309,7 +294,7 @@
             //alert(JSON.stringify(data));
             var contactID = $('#ID').val().trim();
             $.ajax({
-                url: "/api/Contacts/" + contactID,
+                url: "@test.postContactNumberAPIURL" + contactID,
                 method: "PUT",
                 data: data,
                 async: false,
@@ -355,7 +340,7 @@
 
             if (errorCount == 0) {
                 alert("Saved Successfully.");
-                window.location.href = '/Home/Index?email=' + $("#UserEmailId").val();
+                window.location.href = '@test.redirectToIndexPage' + $("#UserEmailId").val();
             }
         })
     })
