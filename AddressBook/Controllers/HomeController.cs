@@ -31,6 +31,7 @@ namespace AddressBook.Controllers
         {
             if (Request.IsAuthenticated || email != null)
             {
+                
                 List<ContactsInfo> test = new List<ContactsInfo>();
                 var userId = db.Users.Where(i => i.Email == email).Select(i => i.Id).FirstOrDefault();
                 using (var client = new HttpClient())
@@ -44,6 +45,7 @@ namespace AddressBook.Controllers
                         TempData["UserID"] = userId;
                         var ampresp = Res.Content.ReadAsStringAsync().Result;
                         test = JsonConvert.DeserializeObject<List<ContactsInfo>>(ampresp);
+                        TempData.Keep("UserID");
                         return View(test);
 
                     }

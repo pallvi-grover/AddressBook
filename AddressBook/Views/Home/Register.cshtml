@@ -35,7 +35,8 @@
                 type: 'POST',
                 data: data,
                 success: function (resp) {
-                    window.location.href = '/Home/Index';
+                    alert("Registration Successfull. Please login to continue...")
+                    window.location.href = '/Home/Login';
                 },
                 error: function (request, message, error) {
                     var response = null;
