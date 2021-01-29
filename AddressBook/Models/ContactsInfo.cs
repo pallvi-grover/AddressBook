@@ -28,6 +28,9 @@ namespace AddressBook.Models
         public string address { get; set; }
         public string imageURL { get; set; }
 
+        public string applicationUserId { get; set; }
+        public ApplicationUser applicationUser { get; set; }
+
         public ICollection<PhoneNumbers> phoneNumbers { get; set; }
     }
 
@@ -40,7 +43,6 @@ namespace AddressBook.Models
         [DataType(DataType.PhoneNumber)]
         [StringLength(15, ErrorMessage = "Phone number can be maximum of 15 digits")]
         public string Number { get; set; }
-
     
         public int contactId { get; set; }
         public ContactsInfo contacts { get; set; }

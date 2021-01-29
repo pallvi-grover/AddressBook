@@ -1,8 +1,10 @@
-﻿using System.Security.Claims;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure.Annotations;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 
 namespace AddressBook.Models
 {
@@ -24,11 +26,30 @@ namespace AddressBook.Models
             //: base("DefaultConnection", throwIfV1Schema: false)
             : base("SQLConnection", throwIfV1Schema: false)
         {
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<ApplicationDbContext>());
         }
+        public DbSet<ContactsInfo> ContactsInfos { get; set; }
+        public DbSet<PhoneNumbers> numbers { get; set; }
 
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ContactsInfo>()
+    .HasMany<PhoneNumbers>(g => g.phoneNumbers)
+    .WithRequired(s => s.contacts)
+    .HasForeignKey<int>(s => s.contactId)
+    .WillCascadeOnDelete();
+
+            modelBuilder.Entity<ContactsInfo>()
+                .Property(e => e.emailID)
+                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute() { IsUnique = true }));
+            modelBuilder.Entity<PhoneNumbers>()
+                .Property(e => e.Number)
+                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute() { IsUnique = true }));
         }
     }
 }

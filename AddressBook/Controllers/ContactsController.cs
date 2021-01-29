@@ -15,7 +15,8 @@ namespace AddressBook.Controllers
 {
     public class ContactsController : ApiController
     {
-        private contactsDBContext db = new contactsDBContext();
+        //private contactsDBContext db = new contactsDBContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Contacts
         public IQueryable<ContactsInfo> GetContactsInfos()
@@ -36,6 +37,11 @@ namespace AddressBook.Controllers
             return Ok(contactsInfo);
         }
 
+        public IQueryable<ContactsInfo> GetContactsInfosBasedOnUser(int id, string userId)
+        {
+            return db.ContactsInfos.Where(i => i.applicationUserId == userId).OrderBy(i => i.fullName);
+        }
+
         // PUT: api/Contacts/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutContactsInfo(int id, ContactsInfo contactsInfo)
@@ -51,7 +57,7 @@ namespace AddressBook.Controllers
             }
 
             db.Entry(contactsInfo).State = EntityState.Modified;
-            
+
             try
             {
                 db.SaveChanges();
@@ -72,7 +78,7 @@ namespace AddressBook.Controllers
         }
 
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutPhoneNumber(int id, int pid,PhoneNumbers phoneNumbers)
+        public IHttpActionResult PutPhoneNumber(int id, int pid, PhoneNumbers phoneNumbers)
         {
             if (!ModelState.IsValid)
             {
@@ -113,7 +119,7 @@ namespace AddressBook.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             db.ContactsInfos.Add(contactsInfo);
             try
             {
@@ -133,13 +139,13 @@ namespace AddressBook.Controllers
                 }
                 //The conversion of a datetime2 data type to a datetime data type resulted in an out-of-range value
 
-               
+
             }
             //return CreatedAtRoute("DefaultApi", new { id = contactsInfo.ID }, contactsInfo);
             return Ok();
         }
 
-        public IHttpActionResult PostPhoneNumber(int id,PhoneNumbers phoneno)
+        public IHttpActionResult PostPhoneNumber(int id, PhoneNumbers phoneno)
         {
             if (!ModelState.IsValid)
             {
