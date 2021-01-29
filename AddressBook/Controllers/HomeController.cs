@@ -3,61 +3,75 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using AddressBook.Models;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
 using Newtonsoft.Json;
 
 namespace AddressBook.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        private IAuthenticationManager AuthenticationManager
+        //private IAuthenticationManager AuthenticationManager
+        //{
+        //    get
+        //    {
+        //        return HttpContext.GetOwinContext().Authentication;
+        //    }
+        //}
+        //private contactsDBContext db = new contactsDBContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
+
+        public async Task<ActionResult> Index(string email)
         {
-            get
+            if (Request.IsAuthenticated || email != null)
             {
-                return HttpContext.GetOwinContext().Authentication;
+                List<ContactsInfo> test = new List<ContactsInfo>();
+                var userId = db.Users.Where(i => i.Email == email).Select(i => i.Id).FirstOrDefault();
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://localhost:44336");
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage Res = await client.GetAsync("api/Contacts/0?userId=" + userId);
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        TempData["UserID"] = userId;
+                        var ampresp = Res.Content.ReadAsStringAsync().Result;
+                        test = JsonConvert.DeserializeObject<List<ContactsInfo>>(ampresp);
+                        return View(test);
+
+                    }
+                    else
+                    {
+                        return View("Login");
+                    }
+                }
             }
-        }
-        private contactsDBContext db = new contactsDBContext();
-        public async Task<ActionResult> Index()
-        {
-            //var employees = from e in db.ContactsInfos
-            //                orderby e.ID
-            //                select e;
-
-            //ViewBag.Title = "Home Page";
-
-            // return View(employees);
-            //return View();
-            List<ContactsInfo> test = new List<ContactsInfo>();
-            using (var client = new HttpClient())
+            else
             {
-                client.BaseAddress = new Uri("https://localhost:44336");
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = await client.GetAsync("api/Contacts");
-                if (Res.IsSuccessStatusCode)
-                {
-                    var ampresp = Res.Content.ReadAsStringAsync().Result;
-                    test = JsonConvert.DeserializeObject<List<ContactsInfo>>(ampresp);
-                    return View(test);
-
-                }
-                else
-                {
-                    return View("Login");
-                }
+                return View("Login");
             }
         }
 
         public ActionResult Edit(int id)
         {
-            var employee = (db.ContactsInfos.Where(y => y.ID == id).Select(x => new { Contacts = x, x.phoneNumbers })).ToList();
-            return View(employee[0].Contacts);
+            string email = string.Empty;
+            if (TempData.ContainsKey("UserID"))
+                email = TempData["UserID"] as string;
+            if (email != null)
+            {
+                TempData.Keep("UserID");
+                var employee = (db.ContactsInfos.Where(y => y.ID == id).Select(x => new { Contacts = x, x.phoneNumbers })).ToList();
+                return View(employee[0].Contacts);
+            }
+            else
+                return View("Login");
+
         }
 
         [HttpPost]
@@ -80,26 +94,42 @@ namespace AddressBook.Controllers
             }
         }
 
+        [AllowAnonymous]
         public ActionResult Login()
         {
+            Response.Cache.SetExpires(DateTime.Now);
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
             return View();
         }
 
         public ActionResult Create()
         {
-            return View(new ContactsInfo());
+            string email = string.Empty;
+            if (TempData.ContainsKey("UserID"))
+                email = TempData["UserID"] as string;
+            if (email != null)
+            {
+                TempData.Keep("UserID");
+                return View(new ContactsInfo());
+            }
+            else
+                return View("Login");
         }
 
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            FormsAuthentication.SignOut();
+            Session.Abandon();
+            HttpContext.User =
+    new GenericPrincipal(new GenericIdentity(string.Empty), null);
             return RedirectToAction("Login", "Home");
         }
 
@@ -139,7 +169,11 @@ namespace AddressBook.Controllers
             else
                 return View();
         }
-
+        public string getEmailId(string userId)
+        {
+            var emailId = db.Users.Where(i => i.Id == userId).Select(i => i.Email).FirstOrDefault();
+            return emailId;
+        }
 
     }
 }

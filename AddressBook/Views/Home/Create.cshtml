@@ -15,6 +15,8 @@
         <div class="form-horizontal">
             <h2 class="page-name">Create New Contact</h2>
             <hr />
+            @Html.Hidden("UserId", TempData["UserID"].ToString())
+            @Html.Hidden("UserEmailId")
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -68,12 +70,12 @@
                 @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
             </div>
 
-        <label id="error" class = "text-danger"></label>
+            <label id="error" class="text-danger"></label>
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <button id="create" class="btn btn-default">Create</button>
-                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Cancel", null, null, new { @class = "btn btn-default", @id = "Cancel" })
                 </div>
 
             </div>
@@ -83,6 +85,16 @@
 
     <script>
         $(document).ready(function () {
+            $.ajax({
+                url: '/Home/getEmailId',
+                data: { userId: $("#UserId").val().trim() }
+            }).done(function (data) {
+                $("#UserEmailId").val(data);
+            });
+            $("#Cancel").click(function(event){
+       event.preventDefault();
+                window.location.href = "@Url.Action("Index", "Home")" + "?email=" + $("#UserEmailId").val();
+    });
             $("#create").on('click', function () {
                 var jsonObj = [], type = [], number = [];
                 $("tr > td > input#Type_").each(function (index, value) {
@@ -108,31 +120,32 @@
                     "dob": $("#dob").val().trim(),
                     "address": $("#address").val().trim(),
                     "ImageURL": $("#file").val().trim() == "" ? "~/ContactImages/defaultImage.JPG" : "~/ContactImages/" + $("#file").val().trim().split("\\")[length],
+                    "applicationUserId": $("#UserId").val().trim(),
                     "phoneNumbers": jsonObj
                 };
 
-        $.ajax({
-            url: "/api/Contacts/",
-            method: "POST",
-            data: data,
-            async: false,
-            success: function (data) {
-               
-            },
-            //error: function (xhr, ajaxOptions, thrownError) {
-            //    if (xhr.status == 404) {
-            //        alert(thrownError);
-            //        alert("Error occured");
-            //        $('#someText').text('Cannot find this record');
-            //    }
-            //}
-            error: function (request, message, error) {
-                if (request.responseJSON != null) {
-                    $('#error').text(request.responseJSON.Message);
-                }
+                $.ajax({
+                    url: "/api/Contacts/",
+                    method: "POST",
+                    data: data,
+                    async: false,
+                    success: function (data) {
 
-            }
-        });
+                    },
+                    //error: function (xhr, ajaxOptions, thrownError) {
+                    //    if (xhr.status == 404) {
+                    //        alert(thrownError);
+                    //        alert("Error occured");
+                    //        $('#someText').text('Cannot find this record');
+                    //    }
+                    //}
+                    error: function (request, message, error) {
+                        if (request.responseJSON != null) {
+                            $('#error').text(request.responseJSON.Message);
+                        }
+
+                    }
+                });
 
             })
         })

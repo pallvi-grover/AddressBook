@@ -27,67 +27,69 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal equal">
-        <h2 class="page-name">Edit the Contacts Information</h2>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID)
-        <div class="form-group">
-            @Html.Label("Name", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("NickName ", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Email ID", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("DOB ", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.dob, "{0:yyyy-MM-dd}", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Address ", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div id="AddPhoneNumberDetails">
-            @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
-        </div>
-        <div id="PhoneNumberDetails">
-            @if (Model.phoneNumbers != null)
-            {
-                @Html.Partial("_ViewPhoneNumber", Model.phoneNumbers)
-            }
-            else
-            {
-             @Html.Partial("_ViewPhoneNumber", new ViewDataDictionary())
-            }
-        </div>
-        <div id="EditPhoneNumberDetails">
-            @Html.Partial("_EditPhoneNumber", Model)
+<div class="form-horizontal equal">
+    <h2 class="page-name">Edit the Contacts Information</h2>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+    @Html.Hidden("UserId", TempData["UserID"].ToString())
+    @Html.Hidden("UserEmailId")
+    <div class="form-group">
+        @Html.Label("Name", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.Label("NickName ", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Email ID", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("DOB ", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.dob, "{0:yyyy-MM-dd}", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Address ", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div id="AddPhoneNumberDetails">
+        @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
+    </div>
+    <div id="PhoneNumberDetails">
+        @if (Model.phoneNumbers != null)
+        {
+            @Html.Partial("_ViewPhoneNumber", Model.phoneNumbers)
+        }
+        else
+        {
+            @Html.Partial("_ViewPhoneNumber", new ViewDataDictionary())
+        }
+    </div>
+    <div id="EditPhoneNumberDetails">
+        @Html.Partial("_EditPhoneNumber", Model)
+    </div>
+</div>
     <div class="equal">
         <div class="form-group img-responsive image-container">
             <img id="user_img" alt="@Model.fullName" src="@Url.Content(Model.imageURL)" height="230px" width="200px" style="border:solid" />
@@ -102,7 +104,7 @@
                 @Html.Label("Hide Phone Number", new { @class = "btn btn-default common", onclick = "showPhoneNumberDetails(true,this)", @id = "HideButton" })
                 @*@Html.Label("Add Phone Number", new { @class = "btn btn-default", onclick = "addPhoneNumber()" })*@
                 @Html.Label("Edit Phone Number", new { @class = "btn btn-default common", onclick = "showPhoneNumberDetails(false,this)" })
-                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Cancel", null, null, new { @class = "btn btn-default", @id = "Cancel" })
 
             </div>
         </div>
@@ -167,6 +169,16 @@
 
 
     $(document).ready(function () {
+        $.ajax({
+                url: '/Home/getEmailId',
+                data: { userId: $("#UserId").val().trim() }
+            }).done(function (data) {
+                $("#UserEmailId").val(data);
+            });
+            $("#Cancel").click(function(event){
+       event.preventDefault();
+                window.location.href = "@Url.Action("Index", "Home")" + "?email=" + $("#UserEmailId").val();
+    });
         $("#create").on('click', function () {
             var jsonObj = [], type = [], number = [], id = [];
             $("tr > td > input#item_type").each(function (index, value) {
@@ -253,7 +265,7 @@
                     data: item,
                     async: false,
                     success: function (data) {
-                        
+
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         if (xhr.status == 404) {
