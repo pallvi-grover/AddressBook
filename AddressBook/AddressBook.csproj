@@ -292,6 +292,7 @@
     <Content Include="Views\Shared\_PhoneNumbers.cshtml" />
     <Content Include="Views\Shared\_ViewPhoneNumber.cshtml" />
     <Content Include="Views\Shared\_EditPhoneNumber.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
