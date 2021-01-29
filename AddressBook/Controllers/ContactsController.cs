@@ -19,10 +19,10 @@ namespace AddressBook.Controllers
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         // GET: api/Contacts
-        public IQueryable<ContactsInfo> GetContactsInfos()
-        {
-            return db.ContactsInfos.OrderBy(i => i.fullName);
-        }
+        //public IQueryable<ContactsInfo> GetContactsInfos()
+        //{
+        //    return db.ContactsInfos.OrderBy(i => i.fullName);
+        //}
 
         // GET: api/Contacts/5
         [ResponseType(typeof(ContactsInfo))]
