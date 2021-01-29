@@ -19,6 +19,9 @@
             <input type="password" id="txtConfirmPwd" class="form-control">
         </div>
     </div>
+    <div>
+    <label id="error" class="text-danger"></label>
+        </div>
     <button id="register" class="btn btn-default">Submit</button>
     @Html.ActionLink("Cancel", "Login", null, new { @class = "btn btn-default" })
 </div>
@@ -26,7 +29,6 @@
 <script>
     $(document).ready(function () {
         $("#register").on('click', function () {
-            alert("Entered");
             var data = { Email: $("#txtEmail").val().trim(), Password: $("#textPwd").val().trim(), ConfirmPassword: $("#txtConfirmPwd").val().trim() };
             $.ajax({
                 url: "/api/Account/Register",
@@ -34,12 +36,38 @@
                 data: data,
                 success: function (resp) {
                     window.location.href = '/Home/Index';
+                },
+                error: function (request, message, error) {
+                    var response = null;
+                    var errors = [];
+                    var errorsString = "";
+                    if (request.status == 400) {
+                        try {
+                            response = JSON.parse(request.responseText);
+                        }
+                        catch (e) {
+                        }
+                    }
+                    if (response != null) {
+                        var modelState = response.ModelState;
+                        for (var key in modelState) {
+                            if (modelState.hasOwnProperty(key)) {
+                                errorsString = (errorsString == "" ? "" : errorsString + "<br/>") + modelState[key];
+                                errors.push(modelState[key]);//list of error messages in an array
+                            }
+                        }
+                    }
+                    if (errorsString != "") {
+                        $("#error").html(errorsString);
+
+                    }
                 }
+
             })
         });
     })
 </script>
-    @*//      $("#btnLogin").on('click', function () {
+@*//      $("#btnLogin").on('click', function () {
     ////var data = { Email: $("#loginEmail").val().trim(), Password: $("#textPwd").val().trim(), ConfirmPassword: $("#loginPwd").val().trim() };
     //$.ajax(
     //{
@@ -72,4 +100,3 @@
 
 
     //})*@
-   

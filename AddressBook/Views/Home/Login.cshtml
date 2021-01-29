@@ -14,14 +14,15 @@
         <label>Password</label>
         <input type="password" id="loginPwd" class="form-control">
     </div>
+    <div>
+        <label id="msg" class="text-danger"></label>
+    </div>
+
     <button id="btnLogin" class="btn btn-default">Submit</button>
     <button id="btnCancel" class="btn btn-default">Cancel</button>
 </div>
-<div>
-    <label id="msg"></label>
-</div>
+
 @Html.ActionLink("Register", "Register", null, new { @class = "label" })
-@*@Html.ActionLink("Delete", "Delete", null, new { @class = "label" })*@
 <script>
     $(document).ready(function () {
         $("#btnLogin").on('click', function () {
@@ -47,8 +48,18 @@
                         });
 
                     },
-                    error: function () {
-                        $("#msg").text("Authentication failed");
+                    error: function (request, message, error) {
+                        var response = null;
+                        if (request.status == 400) {
+                            try {
+                                response = JSON.parse(request.responseText);
+                            }
+                            catch (e) {
+                                $("#msg").html("Invalid Response from the server.");
+                            }
+                        }
+                            $("#msg").html(response.error_description.toString());
+
                     }
                 })
         });
