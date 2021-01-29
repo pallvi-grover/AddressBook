@@ -26,7 +26,6 @@
 @using (Html.BeginForm("Create", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-
     <div class="form-horizontal equal">
         <h2 class="page-name">Edit the Contacts Information</h2>
         <hr />
@@ -81,7 +80,7 @@
             }
             else
             {
-             @Html.Partial("_ViewPhoneNumber", new ViewDataDictionary())
+                @Html.Partial("_ViewPhoneNumber", new ViewDataDictionary())
             }
         </div>
         <div id="EditPhoneNumberDetails">
@@ -253,7 +252,7 @@
                     data: item,
                     async: false,
                     success: function (data) {
-                        
+
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         if (xhr.status == 404) {
@@ -283,6 +282,7 @@
                 async: false,
                 success: function (data) {
                     alert("Saved Successfully.");
+                    window.location.href = '/Home/Index';
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     if (xhr.status == 404) {

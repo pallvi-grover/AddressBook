@@ -213,13 +213,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202101220003055_InitialCreate.cs" />
-    <Compile Include="Migrations\202101220003055_InitialCreate.designer.cs">
-      <DependentUpon>202101220003055_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101262349397_init.cs" />
-    <Compile Include="Migrations\202101262349397_init.designer.cs">
-      <DependentUpon>202101262349397_init.cs</DependentUpon>
+    <Compile Include="Migrations\202101282127434_init.cs" />
+    <Compile Include="Migrations\202101282127434_init.designer.cs">
+      <DependentUpon>202101282127434_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -292,12 +288,9 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\Create.cshtml" />
-
     <Content Include="Views\Shared\_PhoneNumbers.cshtml" />
-
     <Content Include="Views\Shared\_ViewPhoneNumber.cshtml" />
     <Content Include="Views\Shared\_EditPhoneNumber.cshtml" />
-
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -333,11 +326,8 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202101220003055_InitialCreate.resx">
-      <DependentUpon>202101220003055_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101262349397_init.resx">
-      <DependentUpon>202101262349397_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202101282127434_init.resx">
+      <DependentUpon>202101282127434_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
