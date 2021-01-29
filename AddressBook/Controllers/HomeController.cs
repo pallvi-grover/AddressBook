@@ -25,7 +25,7 @@ namespace AddressBook.Controllers
         //}
         //private contactsDBContext db = new contactsDBContext();
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        private ReferenceVariable hardCodedObjects = new ReferenceVariable();
 
         public async Task<ActionResult> Index(string email)
         {
@@ -36,10 +36,10 @@ namespace AddressBook.Controllers
                 var userId = db.Users.Where(i => i.Email == email).Select(i => i.Id).FirstOrDefault();
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44336");
+                    client.BaseAddress = new Uri(hardCodedObjects.localhostURL);
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    HttpResponseMessage Res = await client.GetAsync("api/Contacts/0?userId=" + userId);
+                    HttpResponseMessage Res = await client.GetAsync(hardCodedObjects.getAPIURL + userId);
                     if (Res.IsSuccessStatusCode)
                     {
                         TempData["UserID"] = userId;
@@ -127,21 +127,19 @@ namespace AddressBook.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "fullName,nickName,emailID,dob,address")] ContactsInfo contacts, HttpPostedFileBase file)
         {
-            var allowedExtensions = new[] {
-            ".Jpg", ".png", ".jpg", "jpeg", ".JPG"
-        };
+            
             if (file != null)
             {
                 //Extract Image File Name.
                 string fileName = System.IO.Path.GetFileName(file.FileName);
                 //string fileId = Guid.NewGuid().ToString().Replace("-", "");
                 var ext = System.IO.Path.GetExtension(file.FileName);
-                if (allowedExtensions.Contains(ext)) //check what type of extension  
+                if (hardCodedObjects.allowedExtensions.Contains(ext)) //check what type of extension  
                 {
                     string name = System.IO.Path.GetFileNameWithoutExtension(fileName); //getting file name without extension  
                     string myfile = name + ext; //appending the name with id  
                                                 // store the file inside ~/project folder(Img)  
-                    var filePath = System.IO.Path.Combine(Server.MapPath("~/ContactImages"), myfile);
+                    var filePath = System.IO.Path.Combine(Server.MapPath(hardCodedObjects.imagePathURL), myfile);
                     //Save the Image File in Folder.
                     file.SaveAs(filePath);
 

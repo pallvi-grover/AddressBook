@@ -1,4 +1,4 @@
-﻿
+﻿@using AddressBook.Models
 @{
     ViewBag.Title = "Login";
 }
@@ -24,27 +24,29 @@
 
 @Html.ActionLink("Register", "Register", null, new { @class = "label" })
 <script>
+        @{
+        ReferenceVariable test = new ReferenceVariable();
+    }
     $(document).ready(function () {
         $("#btnLogin").on('click', function () {
-            //var data = { Email: $("#loginEmail").val().trim(), Password: $("#textPwd").val().trim(), ConfirmPassword: $("#loginPwd").val().trim() };
             $.ajax(
                 {
                     url: "/TOKEN",
                     type: "POST",
                     data: $.param({ grant_type: 'password', username: $("#loginEmail").val(), password: $("#loginPwd").val() }),
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    headers: { 'Content-Type': '@test.contentTypeHeader' },
                     success: function (resp) {
                         sessionStorage.setItem('userName', resp.userName);
                         sessionStorage.setItem('accessToken', resp.access_token);
                         var authHeaders = {};
                         authHeaders.Authorization = 'Bearer ' + resp.access_token;
                         $.ajax({
-                            url: "/api/values",
+                            url: "@test.loginURLTokenCheck",
                             type: "GET",
                             headers: authHeaders,
                             success: function (response) {
                                 alert("Welcome "+$("#loginEmail").val());
-                                window.location.href = '/Home/Index?email=' + $("#loginEmail").val();
+                                window.location.href = '@test.redirectToIndexPage' + $("#loginEmail").val();
                             }
                         });
 

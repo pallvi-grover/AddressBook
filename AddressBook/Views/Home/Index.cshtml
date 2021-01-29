@@ -1,7 +1,9 @@
-﻿@model IEnumerable<AddressBook.Models.ContactsInfo>
+﻿@using AddressBook.Models
+@model IEnumerable<AddressBook.Models.ContactsInfo>
 
 @{
     ViewBag.Title = "Contacts List";
+    ReferenceVariable variable = new ReferenceVariable();
 }
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <style>
@@ -17,9 +19,9 @@
         max-width: 350px;
         display: none;
     }
-    #myLink:hover
-    {
-        cursor:pointer;
+
+    #myLink:hover {
+        cursor: pointer;
     }
 </style>
 
@@ -53,9 +55,12 @@
     </table>
 </div>
 <script>
+    @{
+        ReferenceVariable test = new ReferenceVariable();
+    }
     $(document).ready(function () {
         $.ajax({
-            url: '/Home/getEmailId',
+            url: "@test.getEmailIDURL",
             data: { userId: $("#UserId").val().trim() }
         }).done(function (data) {
             $("#UserEmailId").val(data);
@@ -65,12 +70,12 @@
         var resp = confirm("Are you sure you want to delete this number?");
         if (resp) {
             $.ajax({
-                url: "/api/Contacts/" + contactId,
+                url: "@test.deleteContactAPIURL" + contactId,
                 method: "DELETE",
                 async: false,
                 success: function (data) {
                     alert("Number Deleted");
-                    window.location.href = '/Home/Index?email=' + $("#UserEmailId").val();
+                    window.location.href = '@test.redirectToIndexPage' + $("#UserEmailId").val();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     if (xhr.status == 404) {

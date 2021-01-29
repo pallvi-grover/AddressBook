@@ -1,4 +1,5 @@
-﻿@model AddressBook.Models.ContactsInfo
+﻿@using AddressBook.Models
+@model AddressBook.Models.ContactsInfo
 
 <!DOCTYPE html>
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
@@ -10,93 +11,96 @@
 </head>
 <body>
     @*@using (Html.BeginForm("Create", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))*@
-     
+
     {
-        @Html.AntiForgeryToken()
+    @Html.AntiForgeryToken()
 
 
-        <div class="form-horizontal">
-            <h2 class="page-name">Create New Contact</h2>
-            <hr />
-            @Html.Hidden("UserId", TempData["UserID"].ToString())
-            @Html.Hidden("UserEmailId")
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
-                </div>
+    <div class="form-horizontal">
+        <h2 class="page-name">Create New Contact</h2>
+        <hr />
+        @Html.Hidden("UserId", TempData["UserID"].ToString())
+        @Html.Hidden("UserEmailId")
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
             </div>
+        </div>
 
-            <div class="form-group">
-                @Html.Label("NickName ", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
-                </div>
+        <div class="form-group">
+            @Html.Label("NickName ", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
             </div>
+        </div>
 
-            <div class="form-group">
-                @Html.Label("Email ID", htmlAttributes: new { @class = "control-label col-md-2", placeholder = "example@xyz.com" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
-                </div>
+        <div class="form-group">
+            @Html.Label("Email ID", htmlAttributes: new { @class = "control-label col-md-2", placeholder = "example@xyz.com" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
             </div>
+        </div>
 
 
-            <div class="form-group">
-                @Html.Label("DOB ", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control", placeholder = "MM/dd/yyyy" } })
-                    @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
-                </div>
-
-            </div>
-
-            <div class="form-group">
-                @Html.Label("Address ", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Label("Image Path ", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <input type="file" title="Upload Image" id="file" name="file" />
-                    @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div>
-                @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
-            </div>
-
-            <label id="error" class="text-danger"></label>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button id="create" class="btn btn-default">Create</button>
-                    @Html.ActionLink("Cancel", null, null, new { @class = "btn btn-default", @id = "Cancel" })
-                </div>
-
+        <div class="form-group">
+            @Html.Label("DOB ", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control", placeholder = "MM/dd/yyyy" } })
+                @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
             </div>
 
         </div>
+
+        <div class="form-group">
+            @Html.Label("Address ", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Image Path ", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" title="Upload Image" id="file" name="file" />
+                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div>
+            @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
+        </div>
+
+        <label id="error" class="text-danger"></label>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button id="create" class="btn btn-default">Create</button>
+                @Html.ActionLink("Cancel", null, null, new { @class = "btn btn-default", @id = "Cancel" })
+            </div>
+
+        </div>
+
+    </div>
     }
 
     <script>
+        @{
+        ReferenceVariable test = new ReferenceVariable();
+    }
         $(document).ready(function () {
             $.ajax({
-                url: '/Home/getEmailId',
+                url: '@test.getEmailIDURL',
                 data: { userId: $("#UserId").val().trim() }
             }).done(function (data) {
                 $("#UserEmailId").val(data);
             });
             $("#Cancel").click(function(event){
        event.preventDefault();
-                window.location.href = "@Url.Action("Index", "Home")" + "?email=" + $("#UserEmailId").val();
+                window.location.href = "@test.redirectToIndexPage" + $("#UserEmailId").val();
     });
             $("#create").on('click', function () {
                 var jsonObj = [], type = [], number = [];
@@ -122,19 +126,19 @@
                     "emailID": $("#emailID").val().trim(),
                     "dob": $("#dob").val().trim(),
                     "address": $("#address").val().trim(),
-                    "ImageURL": $("#file").val().trim() == "" ? "~/ContactImages/defaultImage.JPG" : "~/ContactImages/" + $("#file").val().trim().split("\\")[length],
+                    "ImageURL": $("#file").val().trim() == "" ? "@test.defaultImage" : "@test.imagePathURL" + $("#file").val().trim().split("\\")[length],
                     "applicationUserId": $("#UserId").val().trim(),
                     "phoneNumbers": jsonObj
                 };
 
                 $.ajax({
-                    url: "/api/Contacts/",
+                    url: "@test.postContactNumberAPIURL",
                     method: "POST",
                     data: data,
                     async: false,
                     success: function (data) {
                         alert("Created Successfully.");
-                        window.location.href = '/Home/Index?email=' + $("#UserEmailId").val();
+                        window.location.href = '@test.redirectToIndexPage' + $("#UserEmailId").val();
 
                     },
                     error: function (request, message, error) {
@@ -164,12 +168,12 @@
                                 $("#error").html(errorsString);
 
                             }
-                    
+
                             if (request.responseJSON.Message != null && errorsString == "" ) {
                                 if (request.responseJSON.Message.includes("duplicate"))
                                      $('#error').text("Email ID already exists. Please enter unique email.");
                                 else
-                                    $('#error').text(request.responseJSON.Message);  
+                                    $('#error').text(request.responseJSON.Message);
                             }
                         }
                     }
