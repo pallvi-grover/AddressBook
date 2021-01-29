@@ -9,80 +9,81 @@
     <title>Create</title>
 </head>
 <body>
-    @using (Html.BeginForm("Create", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @*@using (Html.BeginForm("Create", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))*@
+     
     {
         @Html.AntiForgeryToken()
 
 
-    <div class="form-horizontal">
-        <h2 class="page-name">Create New Contact</h2>
-        <hr />
-      @Html.Hidden("UserId", TempData["UserID"].ToString())
+        <div class="form-horizontal">
+            <h2 class="page-name">Create New Contact</h2>
+            <hr />
+            @Html.Hidden("UserId", TempData["UserID"].ToString())
             @Html.Hidden("UserEmailId")
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("NickName ", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Email ID", htmlAttributes: new { @class = "control-label col-md-2", placeholder = "example@xyz.com" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            @Html.Label("DOB ", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control", placeholder = "MM/dd/yyyy" } })
-                @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
+                </div>
             </div>
 
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Address ", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.Label("Image Path ", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input type="file" title="Upload Image" id="file" name="file" />
-                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div>
-            @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
-        </div>
-
-        <label id="error" class="text-danger"></label>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button id="create" class="btn btn-default">Create</button>
-                @Html.ActionLink("Cancel", null, null, new { @class = "btn btn-default", @id = "Cancel" })
+            <div class="form-group">
+                @Html.Label("NickName ", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.nickName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.nickName, "", new { @class = "text-danger" })
+                </div>
             </div>
 
-        </div>
+            <div class="form-group">
+                @Html.Label("Email ID", htmlAttributes: new { @class = "control-label col-md-2", placeholder = "example@xyz.com" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    </div>
+
+            <div class="form-group">
+                @Html.Label("DOB ", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control", placeholder = "MM/dd/yyyy" } })
+                    @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Address ", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Image Path ", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="file" title="Upload Image" id="file" name="file" />
+                    @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div>
+                @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
+            </div>
+
+            <label id="error" class="text-danger"></label>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button id="create" class="btn btn-default">Create</button>
+                    @Html.ActionLink("Cancel", null, null, new { @class = "btn btn-default", @id = "Cancel" })
+                </div>
+
+            </div>
+
+        </div>
     }
 
     <script>
@@ -133,7 +134,7 @@
                     async: false,
                     success: function (data) {
                         alert("Created Successfully.");
-                        window.location.href = '/Home/Index';
+                        window.location.href = '/Home/Index?email=' + $("#UserEmailId").val();
 
                     },
                     //error: function (xhr, ajaxOptions, thrownError) {
@@ -145,7 +146,32 @@
                     //}
                     error: function (request, message, error) {
                         if (request.responseJSON != null && request.status == 400) {
-                            $('#error').text(request.responseJSON.Message);
+
+                            var response = null;
+                            var errors = [];
+                            var errorsString = "";
+                            if (request.status == 400) {
+                                try {
+                                    response = JSON.parse(request.responseText);
+                                }
+                                catch (e) {
+                                }
+                            }
+                            if (response != null) {
+                                var modelState = response.ModelState;
+                                for (var key in modelState) {
+                                    if (modelState.hasOwnProperty(key)) {
+                                        errorsString = (errorsString == "" ? "" : errorsString + "<br/>") + modelState[key];
+                                        errors.push(modelState[key]);//list of error messages in an array
+                                    }
+                                }
+                            }
+                            if (errorsString != "") {
+                                $("#error").html(errorsString);
+
+                            }
+
+                            //$('#error').text(request.responseJSON.Message);
                             //alert(request.responseJSON.Message)
                         }
                     }

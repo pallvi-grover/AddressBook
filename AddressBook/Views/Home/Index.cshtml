@@ -22,6 +22,8 @@
 
 <h2 class="page-name">Contacts List</h2>
 @Html.ActionLink("Create New Contact", "Create", null, new { @class = "label" })
+@Html.Hidden("UserId", TempData["UserID"].ToString())
+@Html.Hidden("UserEmailId")
 <div class="lead">
     <hr />
     <table class="table table-bordered table-hover table-responsive">
@@ -46,21 +48,33 @@
     </table>
 </div>
 <script>
-    function numberDelete(contactId) {
+    $(document).ready(function () {
         $.ajax({
-            url: "/api/Contacts/" + contactId,
-            method: "DELETE",
-            async: false,
-            success: function (data) {
-                alert("Number Deleted");
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                if (xhr.status == 404) {
-                    alert(thrownError);
-                    alert("Error occured");
-                    $('#someText').text('Cannot find this record');
-                }
-            }
+            url: '/Home/getEmailId',
+            data: { userId: $("#UserId").val().trim() }
+        }).done(function (data) {
+            $("#UserEmailId").val(data);
         });
+    })
+    function numberDelete(contactId) {
+        var resp = confirm("Are you sure you want to delete this number?");
+        if (resp) {
+            $.ajax({
+                url: "/api/Contacts/" + contactId,
+                method: "DELETE",
+                async: false,
+                success: function (data) {
+                    alert("Number Deleted");
+                    window.location.href = '/Home/Index?email=' + $("#UserEmailId").val();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    if (xhr.status == 404) {
+                        alert(thrownError);
+                        alert("Error occured");
+                        $('#someText').text('Cannot find this record');
+                    }
+                }
+            });
+        }
     }
 </script>

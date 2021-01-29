@@ -43,7 +43,7 @@
                             type: "GET",
                             headers: authHeaders,
                             success: function (response) {
-                                alert($("#loginEmail").val());
+                                alert("Welcome "+$("#loginEmail").val());
                                 window.location.href = '/Home/Index?email=' + $("#loginEmail").val();
                             }
                         });

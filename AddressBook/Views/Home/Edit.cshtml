@@ -27,21 +27,20 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal equal">
-        <h2 class="page-name">Edit the Contacts Information</h2>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID)
-      @Html.Hidden("UserId", TempData["UserID"].ToString())
+<div class="form-horizontal equal">
+    <h2 class="page-name">Edit the Contacts Information</h2>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+    @Html.Hidden("UserId", TempData["UserID"].ToString())
     @Html.Hidden("UserEmailId")
-        <div class="form-group">
-            @Html.Label("Name", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
-            </div>
-
+    <div class="form-group">
+        @Html.Label("Name", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.fullName, "", new { @class = "text-danger" })
         </div>
+
     </div>
 
     <div class="form-group">
@@ -55,7 +54,7 @@
     <div class="form-group">
         @Html.Label("Email ID", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.emailID, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
             @Html.ValidationMessageFor(model => model.emailID, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -68,14 +67,15 @@
         </div>
     </div>
 
-        <div class="form-group">
-            @Html.Label("Address ", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
-            
+    <div class="form-group">
+        @Html.Label("Address ", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+
         </div>
     </div>
+    <label id="someText" class="text-danger"></label>
     <div id="AddPhoneNumberDetails">
         @Html.Partial("_PhoneNumbers", new ViewDataDictionary())
     </div>
@@ -92,6 +92,7 @@
     <div id="EditPhoneNumberDetails">
         @Html.Partial("_EditPhoneNumber", Model)
     </div>
+
 </div>
     <div class="equal">
         <div class="form-group img-responsive image-container">
@@ -99,6 +100,7 @@
             <input type="file" title="Upload Image" id="file" name="file" onchange="show(this)" />
         </div>
     </div>
+  
     <div class="form-horizontal">
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -183,7 +185,7 @@
                 window.location.href = "@Url.Action("Index", "Home")" + "?email=" + $("#UserEmailId").val();
     });
         $("#create").on('click', function () {
-            var jsonObj = [], type = [], number = [], id = [];
+            var jsonObj = [], type = [], number = [], id = []; errorCount = 0;
             $("tr > td > input#item_type").each(function (index, value) {
                 type.push($(value).val().trim());
             });
@@ -202,22 +204,11 @@
                 jsonObj.push(item);
 
             });
-            //if ($("#file").val().trim() != "")
-            //    var length = $("#file").val().trim().split("\\").length - 1;
 
-            //var data = {
-            //    "fullName": $("#fullName").val().trim(),
-            //    "nickName": $("#nickName").val().trim(),
-            //    "emailID": $("#emailID").val().trim(),
-            //    "dob": $("#dob").val().trim(),
-            //    "address": $("#address").val().trim(),
-            //    "ImageURL": $("#file").val().trim() == "" ? "~/ContactImages/defaultImage.JPG" : "~/ContactImages/" + $("#file").val().trim().split("\\")[length],
-            //    "phoneNumbers": jsonObj
-            //};
-
-            //alert(JSON.stringify(jsonObj[0].ID));
 
             jsonObj.forEach(putApi);
+
+            
 
             function putApi(item, index) {
                 var contactID = jsonObj[index].contactId;
@@ -231,10 +222,14 @@
                         //alert(item);
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
+                        errorCount+=1;
                         if (xhr.status == 404) {
                             alert(thrownError);
                             alert("Error occured");
                             $('#someText').text('Cannot find this record');
+                        }
+                        else {
+                            $('#someText').text(xhr.responseJSON.Message);
                         }
                     }
                 });
@@ -271,16 +266,34 @@
 
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
+                        errorCount += 1;
                         if (xhr.status == 404) {
                             alert(thrownError);
                             alert("Error occured");
                             $('#someText').text('Cannot find this record');
                         }
+                        else {
+                            if (xhr.status == 404) {
+                                alert(thrownError);
+                                alert("Error occured");
+                                $('#someText').text('Cannot find this record');
+                            }
+                            else {
+                                $('#someText').text(xhr.responseJSON.Message);
+                            }
+                        }
                     }
                 });
             }
-            if ($("#file").val().trim() != "")
+            var image;
+            if ($("#file").val().trim() != "") {
                 var length = $("#file").val().trim().split("\\").length - 1;
+                image = $("#file").val().trim() == "" ? "~/ContactImages/defaultImage.JPG" : "~/ContactImages/" + $("#file").val().trim().split("\\")[length];
+            }
+            else {
+                var len = $("#user_img").attr("src").split("/").length;
+                image = $("#user_img").attr("src").split("/")[len - 1] == "" ? "~/ContactImages/defaultImage.JPG" : "~/ContactImages/" + $("#user_img").attr("src").split("/")[len - 1];
+            }
             var data = {
                 "ID": $('#ID').val().trim(),
                 "fullName": $("#fullName").val().trim(),
@@ -288,8 +301,11 @@
                 "emailID": $("#emailID").val().trim(),
                 "dob": $("#dob").val().trim(),
                 "address": $("#address").val().trim(),
-                "ImageURL": $("#file").val().trim() == "" ? "~/ContactImages/defaultImage.JPG" : "~/ContactImages/" + $("#file").val().trim().split("\\")[length],
+                "applicationUserId": $("#UserId").val().trim(),
+                "ImageURL": image,
             };
+            //alert($("#user_img").attr("src"));
+            //alert(JSON.stringify(data));
             var contactID = $('#ID').val().trim();
             $.ajax({
                 url: "/api/Contacts/" + contactID,
@@ -297,18 +313,49 @@
                 data: data,
                 async: false,
                 success: function (data) {
-                    alert("Saved Successfully.");
-                    window.location.href = '/Home/Index';
+                    //alert("Saved Successfully.");
+                    //window.location.href = '/Home/Index?email=' + $("#UserEmailId").val();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
+                    errorCount += 1;
                     if (xhr.status == 404) {
                         alert(thrownError);
                         alert("Error occured");
                         $('#someText').text('Cannot find this record');
                     }
+                    else {
+                        var response = null;
+                        var errors = [];
+                        var errorsString = "";
+                        if (xhr.status == 400) {
+                            try {
+                                response = JSON.parse(xhr.responseText);
+                            }
+                            catch (e) {
+                            }
+                        }
+                        if (response != null) {
+                            var modelState = response.ModelState;
+                            for (var key in modelState) {
+                                if (modelState.hasOwnProperty(key)) {
+                                    errorsString = (errorsString == "" ? "" : errorsString + "<br/>") + modelState[key];
+                                    errors.push(modelState[key]);//list of error messages in an array
+                                }
+                            }
+                        }
+                        if (errorsString != "") {
+                            $("#someText").html(errorsString);
+
+                        }
+
+                    }
                 }
             });
 
+            if (errorCount == 0) {
+                alert("Saved Successfully.");
+                window.location.href = '/Home/Index?email=' + $("#UserEmailId").val();
+            }
         })
     })
 </script>

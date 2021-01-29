@@ -107,6 +107,19 @@ namespace AddressBook.Controllers
                     throw;
                 }
             }
+            catch (Exception e) {
+                var ex = e.InnerException.InnerException.Message;
+
+                if (ex.Contains("Cannot insert duplicate key row"))
+                {
+                    return BadRequest("Phone Number already exists. Please enter unique number.");
+                }
+                else
+                {
+                    return BadRequest(ex.ToString());
+                }
+
+            }
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -153,8 +166,24 @@ namespace AddressBook.Controllers
             }
 
             db.numbers.Add(phoneno);
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch(Exception e) {
+                var ex = e.InnerException.InnerException.Message;
 
+                if (ex.Contains("Cannot insert duplicate key row"))
+                {
+                    return BadRequest("Phone Number already exists. Please enter unique number.");
+                }
+                else
+                {
+                    return BadRequest(ex.ToString());
+                }
+                //The conversion of a datetime2 data type to a datetime data type resulted in an out-of-range value
+
+            }
             //return CreatedAtRoute("DefaultApi", new { id = contactsInfo.ID }, contactsInfo);
             return Ok();
         }
