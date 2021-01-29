@@ -164,10 +164,10 @@ namespace AddressBook.Controllers
                     //db.SaveChanges();
                 }
                 //Redirect to Index Action.
-                return RedirectToAction("Index");
+                
             }
-            else
-                return View();
+            //return RedirectToAction("Index");
+            return View();
         }
         public string getEmailId(string userId)
         {
