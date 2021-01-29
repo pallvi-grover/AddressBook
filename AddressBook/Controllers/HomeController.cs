@@ -85,6 +85,12 @@ namespace AddressBook.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult About()
+        {
+            return View();
+        }
+
         public ActionResult Create()
         {
             ViewBag.Authenticate = true;
