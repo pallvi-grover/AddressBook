@@ -25,6 +25,7 @@ namespace AddressBook.Controllers
         //}
         //private contactsDBContext db = new contactsDBContext();
         private ApplicationDbContext db = new ApplicationDbContext();
+        
 
         public async Task<ActionResult> Index(string email)
         {
@@ -75,26 +76,7 @@ namespace AddressBook.Controllers
                 return View("Login");
 
         }
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                var employee = db.ContactsInfos.Single(m => m.ID == id);
-                if (TryUpdateModel(employee))
-                {
-                    //To Do:- database code
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                return View(employee);
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
 
         [AllowAnonymous]
         public ActionResult Login()
