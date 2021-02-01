@@ -28,44 +28,52 @@
 
 <h2 class="page-name">Contacts List</h2>
 @Html.ActionLink("Create New Contact", "Create", null, new { @class = "label" })
-@Html.Hidden("UserId", TempData["UserID"].ToString())
-@Html.Hidden("UserEmailId")
-<div class="lead">
+@if (TempData["UserID"] != null)
+{
+    @Html.Hidden("UserId", TempData["UserID"].ToString())
+    @Html.Hidden("UserEmailId")
+}
+<div class="lead" id="main-table-content">
     <hr />
-    <table class="table table-bordered table-hover table-responsive">
-        <tr>
-            <th colspan="2">
-                Names:
-            </th>
-            @*<th></th>*@
-        </tr>
-        @foreach (var item in Model)
-        {
+    @if (Model != null)
+    {
+        <table class="table table-bordered table-hover table-responsive">
             <tr>
-                <td>
-                    @Html.ActionLink(item.fullName, "Edit", new { id = item.ID })
-                </td>
-                <td>
-                    @*@Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + ")" })*@
-                    @Html.Label("Delete", "Delete", new { @id = "myLink", onclick = "numberDelete(" + item.ID + ")" })
-                </td>
+                <th colspan="2">
+                    Names:
+                </th>
+                @*<th></th>*@
             </tr>
-        }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.fullName, "Edit", new { id = item.ID })
+                    </td>
+                    <td>
+                        @*@Html.ActionLink("Delete", null, null, new { @id = "myLink", onclick = "numberDelete(" + item.ID + ")" })*@
+                        @Html.Label("Delete", "Delete", new { @id = "myLink", onclick = "numberDelete(" + item.ID + ")" })
+                    </td>
+                </tr>
+            }
 
-    </table>
+        </table>
+        }
 </div>
 <script>
     @{
         ReferenceVariable test = new ReferenceVariable();
     }
-    $(document).ready(function () {
-        $.ajax({
-            url: "@test.getEmailIDURL",
-            data: { userId: $("#UserId").val().trim() }
-        }).done(function (data) {
-            $("#UserEmailId").val(data);
-        });
-    })
+    if ($("#UserId") != null && $("#UserId") != "undefined") {
+        $(document).ready(function () {
+            $.ajax({
+                url: "@test.getEmailIDURL",
+                data: { userId: $("#UserId").val().trim() }
+            }).done(function (data) {
+                $("#UserEmailId").val(data);
+            });
+        })
+    }
     function numberDelete(contactId) {
         var resp = confirm("Are you sure you want to delete this number?");
         if (resp) {

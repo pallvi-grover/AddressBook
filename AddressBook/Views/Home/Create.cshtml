@@ -12,7 +12,7 @@
 <body>
     @*@using (Html.BeginForm("Create", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))*@
 
-    {
+    @*{*@
     @Html.AntiForgeryToken()
 
 
@@ -50,7 +50,7 @@
         <div class="form-group">
             @Html.Label("DOB ", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control", placeholder = "MM/dd/yyyy" } })
+                @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
             </div>
 
@@ -85,9 +85,9 @@
         </div>
 
     </div>
-    }
+    @*}*@
 
-    <script>
+<script>
         @{
         ReferenceVariable test = new ReferenceVariable();
     }
@@ -137,8 +137,28 @@
                     data: data,
                     async: false,
                     success: function (data) {
+                        var fileUpload = $('#file').get(0);
+                        var files = fileUpload.files;
+                        var fileData = new FormData();
+                        if (files[0] != null) {
+                            fileData.append(files[0].name, files[0]);
+                            $.ajax({
+                                url: '@test.uploadFileToProject',
+                                type: "POST",
+                                contentType: false,
+                                processData: false,
+                                data: fileData,
+                                success: function (result) {
+
+                                },
+                                error: function (err) {
+                                    alert(err.statusText);
+                                }
+                            });
+                        }
                         alert("Created Successfully.");
                         window.location.href = '@test.redirectToIndexPage' + $("#UserEmailId").val();
+
 
                     },
                     error: function (request, message, error) {
@@ -170,8 +190,10 @@
                             }
 
                             if (request.responseJSON.Message != null && errorsString == "" ) {
-                                if (request.responseJSON.Message.includes("duplicate"))
-                                     $('#error').text("Email ID already exists. Please enter unique email.");
+                                if (request.responseJSON.Message.includes("unique index 'IX_emailID'"))
+                                    $('#error').text("Email ID already exists. Please enter unique email.");
+                                else if (request.responseJSON.Message.includes("duplicate key row in object 'dbo.PhoneNumbers'"))
+                                    $('#error').text("Phone Number already exists. Please enter unique number.");
                                 else
                                     $('#error').text(request.responseJSON.Message);
                             }
@@ -181,6 +203,6 @@
 
             })
         })
-    </script>
+</script>
 </body>
 </html>

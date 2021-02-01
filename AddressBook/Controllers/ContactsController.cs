@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -17,12 +16,8 @@ namespace AddressBook.Controllers
         //private contactsDBContext db = new contactsDBContext();
         private ApplicationDbContext db = new ApplicationDbContext();
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private ReferenceVariable hardCodedObjects = new ReferenceVariable();
 
-        // GET: api/Contacts
-        //public IQueryable<ContactsInfo> GetContactsInfos()
-        //{
-        //    return db.ContactsInfos.OrderBy(i => i.fullName);
-        //}
 
         // GET: api/Contacts/5
         [ResponseType(typeof(ContactsInfo))]
@@ -40,8 +35,13 @@ namespace AddressBook.Controllers
 
         public IQueryable<ContactsInfo> GetContactsInfosBasedOnUser(int id, string userId)
         {
-            logger.Info("This is the GET Request to API. Fetched the records for User ID: " + userId);
-            return db.ContactsInfos.Where(i => i.applicationUserId == userId).OrderBy(i => i.fullName);
+            if (userId != null)
+            {
+                logger.Info("This is the GET Request to API. Fetched the records for User ID: " + userId);
+                return db.ContactsInfos.Where(i => i.applicationUserId == userId).OrderBy(i => i.fullName);
+            }
+            else
+                return null;
         }
 
         // PUT: api/Contacts/5
@@ -125,7 +125,7 @@ namespace AddressBook.Controllers
             catch (Exception e) {
                 var ex = e.InnerException.InnerException.Message;
 
-                if (ex.Contains("Cannot insert duplicate key row"))
+                if (ex.Contains(hardCodedObjects.duplicatePhone))
                 {
                     return BadRequest("Phone Number already exists. Please enter unique number.");
                 }
@@ -162,7 +162,7 @@ namespace AddressBook.Controllers
             {
                 var ex = e.InnerException.InnerException.Message;
 
-                if (ex.Contains("The conversion of a datetime2 data type to a datetime data type resulted in an out-of-range value"))
+                if (ex.Contains(hardCodedObjects.datetimeConflict))
                 {
                     logger.Fatal(BadRequest("DOB Value Out of Range."));
                     return BadRequest("DOB Value Out of Range.");
@@ -172,9 +172,6 @@ namespace AddressBook.Controllers
                     logger.Fatal(BadRequest(ex.ToString()));
                     return BadRequest(ex.ToString());
                 }
-                //The conversion of a datetime2 data type to a datetime data type resulted in an out-of-range value
-
-
             }
             logger.Info("POST request for contacts executed successfully");
             return Ok();
@@ -200,7 +197,7 @@ namespace AddressBook.Controllers
             catch(Exception e) {
                 var ex = e.InnerException.InnerException.Message;
 
-                if (ex.Contains("Cannot insert duplicate key row"))
+                if (ex.Contains(hardCodedObjects.duplicatePhone))
                 {
                     return BadRequest("Phone Number already exists. Please enter unique number.");
                 }
@@ -208,11 +205,7 @@ namespace AddressBook.Controllers
                 {
                     return BadRequest(ex.ToString());
                 }
-                //The conversion of a datetime2 data type to a datetime data type resulted in an out-of-range value
-
             }
-            //return CreatedAtRoute("DefaultApi", new { id = contactsInfo.ID }, contactsInfo);
-
             
             logger.Info("POST request for phone numbers executed successfully");
 

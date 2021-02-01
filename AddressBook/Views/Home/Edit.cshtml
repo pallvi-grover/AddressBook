@@ -339,6 +339,25 @@
             });
 
             if (errorCount == 0) {
+                var fileUpload = $('#file').get(0);
+                        var files = fileUpload.files;
+                        var fileData = new FormData();
+                        if (files[0] != null) {
+                            fileData.append(files[0].name, files[0]);
+                            $.ajax({
+                                url: '@test.uploadFileToProject',
+                                type: "POST",
+                                contentType: false,
+                                processData: false,
+                                data: fileData,
+                                success: function (result) {
+
+                                },
+                                error: function (err) {
+                                    alert(err.statusText);
+                                }
+                            });
+                        }
                 alert("Saved Successfully.");
                 window.location.href = '@test.redirectToIndexPage' + $("#UserEmailId").val();
             }

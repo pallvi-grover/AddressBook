@@ -17,5 +17,9 @@
         public string loginURLTokenCheck = "/api/values";
         public string registerAPIURL = "/api/Account/Register";
         public string redirectToLoginPage = "/Home/Login";
+        public string uploadFileToProject = "/Home/UploadFiles";
+        public string duplicatePhone = "Cannot insert duplicate key row";
+        public string datetimeConflict = "The conversion of a datetime2 data type to a datetime data type resulted in an out-of-range value";
+
     }
 }

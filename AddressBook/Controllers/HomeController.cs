@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,14 +17,6 @@ namespace AddressBook.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        //private IAuthenticationManager AuthenticationManager
-        //{
-        //    get
-        //    {
-        //        return HttpContext.GetOwinContext().Authentication;
-        //    }
-        //}
-        //private contactsDBContext db = new contactsDBContext();
         private ApplicationDbContext db = new ApplicationDbContext();
         private ReferenceVariable hardCodedObjects = new ReferenceVariable();
 
@@ -112,8 +105,6 @@ namespace AddressBook.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
@@ -129,44 +120,61 @@ namespace AddressBook.Controllers
                 return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "fullName,nickName,emailID,dob,address")] ContactsInfo contacts, HttpPostedFileBase file)
-        {
-            
-            if (file != null)
-            {
-                //Extract Image File Name.
-                string fileName = System.IO.Path.GetFileName(file.FileName);
-                //string fileId = Guid.NewGuid().ToString().Replace("-", "");
-                var ext = System.IO.Path.GetExtension(file.FileName);
-                if (hardCodedObjects.allowedExtensions.Contains(ext)) //check what type of extension  
-                {
-                    string name = System.IO.Path.GetFileNameWithoutExtension(fileName); //getting file name without extension  
-                    string myfile = name + ext; //appending the name with id  
-                                                // store the file inside ~/project folder(Img)  
-                    var filePath = System.IO.Path.Combine(Server.MapPath(hardCodedObjects.imagePathURL), myfile);
-                    //Save the Image File in Folder.
-                    file.SaveAs(filePath);
-
-                    //Insert the Image File details in Table.
-
-                    //db.ContactsInfos.Add(new ContactsInfo
-                    //{
-                    //    imageURL = filePath
-                    //});
-                    //db.SaveChanges();
-                }
-                //Redirect to Index Action.
-
-            }
-            //return RedirectToAction("Index");
-            return View();
-        }
         public string getEmailId(string userId)
         {
             var emailId = db.Users.Where(i => i.Id == userId).Select(i => i.Email).FirstOrDefault();
             return emailId;
+        }
+
+        [HttpPost]
+        public ActionResult UploadFiles()
+        {
+            // Checking no of files injected in Request object  
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    //  Get all files from Request object  
+                    HttpFileCollectionBase files = Request.Files;
+                    for (int i = 0; i < files.Count; i++)
+                    {
+
+                        HttpPostedFileBase file = files[i];
+                        string fname;
+                        string fileId = Guid.NewGuid().ToString().Replace("-", "");
+                        var ext = Path.GetExtension(file.FileName);
+                        if (hardCodedObjects.allowedExtensions.Contains(ext))
+                        {
+                            if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+                            {
+                                string[] testfiles = file.FileName.Split(new char[] { '\\' });
+                                fname = testfiles[testfiles.Length - 1];
+                            }
+                            else
+                            {
+                                fname = file.FileName;
+                            }
+                            string myfile = fname + "_" + fileId + ext;
+                            // Get the complete folder path and store the file inside it.  
+                            fname = Path.Combine(Server.MapPath(hardCodedObjects.imagePathURL), myfile);
+                            file.SaveAs(fname);
+
+                        }
+                        else
+                            return Json("Cannot upload this type of file!");
+                    }
+                    return Json("File Uploaded Successfully!");
+
+                }
+                catch (Exception ex)
+                {
+                    return Json("Error occurred. Error details: " + ex.Message);
+                }
+            }
+            else
+            {
+                return Json("No files selected.");
+            }
         }
 
     }
